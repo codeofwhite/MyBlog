@@ -8,7 +8,6 @@ const service = axios.create({
 })
 
 import {ElMessage} from "element-plus";
-import {config} from "@vue/test-utils";
 
 service.interceptors.request.use(config=> {
     if (config.method === "post" && config.url !== '/imgs/upload') {
