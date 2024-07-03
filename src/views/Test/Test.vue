@@ -1,55 +1,59 @@
 <template>
-  <div>
-    <h1>ScrollReveal 演示demo</h1>
-    <div class="item" v-for="item in items" :key="item" :style="{ backgroundColor: item.bgColor }">
-      {{ item.id }}
-    </div>
-    <img class="item" src="@/assets/images/bg.jpg">
-  </div>
+  <swiper
+      class="swiper"
+      :modules="modules"
+      :space-between="30"
+      :effect="'fade'"
+      :navigation="false"
+      :pagination="{ clickable: true }"
+      :autoplay="{ delay: 2500, disableOnInteraction: false }"
+  >
+    <swiper-slide class="slide" v-for="index in 5" :key="index">
+      <img :src="`src/assets/images/${index}.png`" alt=""/>
+    </swiper-slide>
+  </swiper>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import ScrollReveal from 'scrollreveal'
-import { RandomColorGenerator } from 'random-color-creator'
+<script lang="ts">
+import {defineComponent} from 'vue'
+import {Pagination, Autoplay, EffectFade} from 'swiper/modules'
+import {Swiper, SwiperSlide} from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import 'swiper/css/effect-fade'
 
-const items = ref<any>([])
-for (let i = 1; i <= 100; i++) {
-  items.value.push({
-    id: i,
-    bgColor: RandomColorGenerator({alphaChannel: undefined, colorParts: ["", "", ""], optionsObj: undefined, format: 'HEX' })
-  })
-}
-
-// 重要的设置
-onMounted(() => {
-  ScrollReveal().reveal('.item', {
-    reset: true,
-    distance: '50px',
-    origin: 'left',
-    interval: 80,
-    opacity: 0.1,
-    rotate: {
-      x: 20,
-      z: 20
-    },
-    scale: 0.6
-  })
+export default defineComponent({
+  name: 'Test',
+  title: 'Fade effect',
+  url: import.meta.url,
+  components: {
+    Swiper,
+    SwiperSlide
+  },
+  setup() {
+    return {
+      modules: [Pagination, Autoplay, EffectFade]
+    }
+  }
 })
 </script>
 
-<style>
-.item {
-  width: 100%;
-  height: 7%;
-  line-height: 72px;
-  text-align: center;
-  /* background-color: lightgreen; */
-  border-radius: 8px;
-  margin: 10px auto;
-  font-size: 28px;
-  flex: 1 1 0;
-  color: #fff;
+<style lang="scss" scoped>
+@import '@/styles/variables.scss';
+@import '@/styles/mixins.scss';
+@import './style.scss';
+
+.swiper {
+  @include swiper-wrapper($height: 360px);
+
+  .slide {
+    @include swiper-slide();
+
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
 }
 </style>
-

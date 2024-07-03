@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { marked } from "marked";
+import {marked} from "marked";
 import 'md-editor-v3/lib/style.css';
 
 export default {

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import blogRoutes from './blogRoutes';
+import RegisterPage from "@/views/RegisterPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       path:'/test',
       name:'test',
       component:()=>import('../views/Test/Test.vue')
+    },
+    {
+      path:'/register',
+      name:'register',
+      component: RegisterPage
     },
   ].concat(blogRoutes)
 })

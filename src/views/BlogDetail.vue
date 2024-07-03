@@ -1,5 +1,7 @@
 <!--根据-->
 <template>
+  <!-- 弹幕组件，使用v-if控制显示状态 -->
+  <vue-danmaku v-if="showDanmu" v-model:danmus="danmus" class="danmu"></vue-danmaku>
   <div class="blog-detail">
     <h1>{{ blog.title }}</h1>
     <!-- 使用v-html指令渲染Markdown格式的博客内容 -->
@@ -7,24 +9,45 @@
     <!-- 点赞按钮和显示点赞次数的容器 -->
     <div class="likes-section">
       <button @click="incrementLikes">喜欢</button>
+      <!-- 弹幕开关按钮 -->
+      <button class="danmuButton" @click="toggleDanmu">切换弹幕</button>
       <span class="likes-count">喜欢数：{{ likes }}</span>
+    </div>
+    <!-- 弹幕输入区域 -->
+    <div class="danmu-input-section">
+      <input v-model="newDanmu" placeholder="写弹幕..."/>
+      <button @click="insertDanmu">发送弹幕</button>
+    </div>
+  </div>
+  <!-- 评论区 -->
+  <div class="comments-section">
+    <h2>评论</h2>
+    <div v-for="comment in comments" :key="comment.id" class="comment">
+      <p><strong>{{ comment.userEmail }}：</strong>{{ comment.comment }}</p>
+    </div>
+    <div class="add-comment">
+      <input v-model="newComment" placeholder="添加评论..."/>
+      <button @click="submitComment">提交</button>
     </div>
   </div>
 </template>
 
 <script>
 // 导入Markdown文件
-import helloMarked from '../assets/blog1.md?raw'
-import { marked } from "marked";
+import {marked} from "marked";
 import 'md-editor-v3/lib/style.css';
+import vueDanmaku from 'vue3-danmaku'
+import axios from 'axios';
 
 export default {
   name: "BlogDetail",
   components: {
-    helloMarked,
+    vueDanmaku
   },
   created() {
-    this.fetchBlogDetail();
+    this.fetchBlogDetail(); // 在组件创建时获取博客
+    this.fetchDanmus(); // 在组件创建时获取弹幕
+    this.fetchComments(); // 在组件创建时获取评论
   },
   data() {
     return {
@@ -33,30 +56,124 @@ export default {
         content: '',
       },
       likes: 0, // 添加点赞次数属性
+      likeState: false,
+      comments: [
+        {
+          userEmail: '',
+          comment: ''
+        }
+      ], // 评论数组
+      newComment: '', // 新评论的绑定数据
+      danmus: [], // 弹幕
+      newDanmu: '',
+      showDanmu: true, // 控制弹幕显示的状态，默认为true
     }
   },
   methods: {
-    fetchBlogDetail() {
+    async fetchBlogDetail() {
       // 获取路由参数中的id
-      const blogId = this.$route.params.id;
+      const blogId = this.blogId;
+
       // 插入图片有问题
-      const markdownContent = helloMarked;
+      const markdownContent = await import(`../assets/markdowns/${blogId}.md?raw`);
       // 根据id从后端API获取博客详情
       // 这里是模拟的API调用
       // 实际应用中，您需要替换为真实的HTTP请求
       // 例如使用axios.get('/api/blog/' + blogId)...
       this.blog = {
         title: '博客标题：' + blogId,
-        content: markdownContent
+        content: markdownContent.default
       };
     },
+    // 这个还没弄好，没加输入弹幕的地方
+    async insertDanmu() {
+      if (this.newDanmu.trim()) {
+        try {
+          const response = await axios.post('http://localhost:8004/danmu/insertDanmu', {
+            danmu: this.newDanmu,
+            uemail: this.userEmail, // 假设 userEmail 是用户邮箱
+            blogId: this.blogId // 假设 blogId 是博客ID
+          });
+          if (response.data === 'success') {
+            this.danmus.push(this.newDanmu); // 将新弹幕添加到数组中
+            this.newDanmu = ''; // 清空输入框
+          }
+        } catch (error) {
+          console.error('插入弹幕失败:', error);
+        }
+      }
+    },
+    async fetchDanmus() {
+      console.log(this.blogId)
+      try {
+        const response = await axios.post('http://localhost:8004/danmu/selectDanmu', {
+          blogId: this.blogId // 假设 blogId 是博客ID
+        });
+        this.danmus = response.data; // 设置弹幕数组
+      } catch (error) {
+        console.error('获取弹幕失败:', error);
+      }
+    },
     incrementLikes() {
-      this.likes++; // 增加点赞次数
-    }
+      if (this.isLoggedIn) {
+        if (!this.likeState) {
+          this.likes++; // 增加点赞次数
+          this.likeState = true;
+        } else {
+          alert('您已经点过赞了！')
+        }
+      } else {
+        alert('请登录后再点赞！');
+      }
+    },
+    // 提交评论
+    async submitComment() {
+      if (this.newComment.trim()) {
+        try {
+          const response = await axios.post('http://localhost:8005/comments/insertComment', JSON.stringify({
+            userEmail: this.userEmail, // 这里可以替换为用户的名字或保持匿名
+            comment: this.newComment,
+            blogId: this.blogId
+          }), {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+          if (response.data === 'success') {
+            await this.fetchComments(); // 重新获取评论以更新列表
+            this.newComment = ''; // 清空输入框
+          }
+        } catch (error) {
+          console.error('提交评论失败:', error);
+        }
+      }
+    },
+    async fetchComments() {
+      try {
+        const response = await axios.get('http://localhost:8005/comments/getAllComments', {
+          params: {blogId: this.blogId}
+        });
+        this.comments = response.data; // 设置评论数组
+      } catch (error) {
+        console.error('获取评论失败:', error);
+      }
+    },
+    toggleDanmu() {
+      this.showDanmu = !this.showDanmu; // 切换弹幕的显示状态
+    },
   },
   computed: {
     markdownToHtml() {
       return marked(this.blog.content);
+    },
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+    blogId() {
+      return this.$route.params.id
+    },
+    userEmail() {
+      return this.$store.state.uemail;
     }
   },
 }
@@ -64,11 +181,15 @@ export default {
 
 <style scoped>
 /* 主题颜色 */
+/* 主题颜色 */
 :root {
   --theme-color: #f9a9d4; /* 柔和的粉色 */
   --text-color: #333; /* 深色文字，以保证可读性 */
   --background-color: #fff7f8; /* 温暖的背景色 */
   --accent-color: #5b8bf7; /* 浅蓝色调 */
+  --button-hover-color: rgba(91, 139, 247, 0.8); /* 按钮悬停颜色 */
+  --comment-border-color: #5b8bf7; /* 评论边框颜色 */
+  --button-background-color: #1bffc4; /* 按钮背景颜色 */
 }
 
 /* 使用变量 */
@@ -76,13 +197,13 @@ export default {
   font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
   color: var(--text-color);
   display: flex;
-  background: linear-gradient(to right, #00ff9d, #5b8bf7);
+  background: linear-gradient(to right, rgba(249, 238, 255, 0.69), #90fff1);
   justify-content: center;
 }
 
 .markdown-preview {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #f9a9d4;
@@ -93,8 +214,13 @@ export default {
 
 /* 标题颜色 */
 h1 {
-  color: var(--theme-color);
+  margin-left: 15px;
+  color: var(--theme-color); /* 使用主题颜色 */
   margin-bottom: 16px;
+  font-family: 'Arial', sans-serif; /* 使用更加现代的字体 */
+  text-transform: uppercase; /* 文字大写 */
+  letter-spacing: 2px; /* 增加字母间距 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* 添加文字阴影 */
 }
 
 /* 按钮和链接颜色 */
@@ -128,17 +254,19 @@ button:hover, a:hover {
 
 /* 点赞部分的布局 */
 .likes-section {
-  position: absolute; /* 绝对定位 */
-  bottom: 20px; /* 距离底部20px */
-  right: 20px; /* 距离右侧20px */
+  position: fixed; /* 固定定位 */
+  bottom: 8px; /* 距离底部px */
+  left: 8%; /* 调整横坐标 */
+  transform: translateX(-50%); /* 用于确保元素水平居中 */
   display: flex;
   align-items: center;
+  z-index: 1000; /* 确保点赞按钮在其他内容之上 */
 }
 
 /* 点赞按钮样式 */
 button {
   background-color: var(--theme-color); /* 使用主题颜色 */
-  color: #fff;
+  color: rgb(255, 255, 255);
   padding: 12px 24px; /* 增加填充以使按钮更大 */
   font-size: 1.2em; /* 增加字体大小 */
   font-weight: bold; /* 字体加粗 */
@@ -162,5 +290,119 @@ button:hover {
   color: var(--text-color);
   font-style: italic;
   margin-right: 1em;
+}
+
+.comments-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.comments-section h2 {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.comment {
+  background-color: #fff;
+  border-left: 4px solid var(--accent-color);
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.comment:hover {
+  background-color: #f9f9f9;
+}
+
+.comment p {
+  word-break: break-all; /* 在10个字后换行 */
+}
+
+.add-comment input {
+  padding: 10px;
+  margin-right: 10px;
+  width: calc(100% - 120px);
+}
+
+.add-comment {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.add-comment input {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-comment button {
+  padding: 10px 20px;
+  background-color: var(--theme-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-comment button:hover {
+  background-color: #1bffc4;
+}
+
+/*弹幕*/
+.danmu {
+  position: fixed;
+  top: 150px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 2000;
+}
+
+/*控制弹幕的按钮*/
+.danmuButton {
+  position: fixed;
+  display: flex;
+  bottom: 55px; /*距离底部*/
+}
+
+/* 弹幕输入区域样式 */
+.danmu-input-section {
+  position: fixed;
+  bottom: 100px; /* 调整为合适的位置 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 2000;
+}
+
+.danmu-input-section input {
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.danmu-input-section button {
+  padding: 10px 20px;
+  background-color: var(--theme-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.danmu-input-section button:hover {
+  background-color: var(--button-hover-color);
 }
 </style>

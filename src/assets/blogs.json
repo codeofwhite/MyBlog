@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何搭建vue.js环境",
+    "category": "技术"
+  },
+  {
+    "id": 2,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何理解神经网络的原理",
+    "category": "数学"
+  },
+  {
+    "id": 3,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "以良好的心态面对人生",
+    "category": "校园生活"
+  },
+  {
+    "id": 4,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "搭建SpringCloud",
+    "category": "技术"
+  },
+  {
+    "id": 5,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "和女友的故事",
+    "category": "恋爱"
+  },
+  {
+    "id": 6,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何实现一个动态下滑布局",
+    "category": "前端"
+  },
+  {
+    "id": 7,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何实现SpringCloud熔断器",
+    "category": "后端"
+  },
+  {
+    "id": 8,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何使用minio",
+    "category": "数据库"
+  },
+  {
+    "id": 9,
+    "src": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "content": "如何实现Windows原生远程桌面",
+    "category": "Windows"
+  }
+]
