@@ -3,7 +3,7 @@
   <div class="modal">
     <div class="modal-content">
       <span class="close" @click="$emit('close')">×</span>
-      <img :src="photo.src" :alt="photo.alt">
+      <img :src="photo.url" :alt="photo.alt">
       <!-- 新增图片描述部分 -->
       <div class="photo-description">{{ photo.alt }}</div>
     </div>

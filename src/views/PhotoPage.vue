@@ -5,7 +5,7 @@
     <!-- 添加标题 -->
     <div class="photo" v-for="(photo, index) in photos" :key="index" @click="openModal(photo)">
       <!--懒加载图片-->
-      <img v-img-lazy="photo.src" :alt="photo.alt">
+      <img v-lazy="photo.url" :alt="photo.alt">
       <!-- 添加描述的div -->
       <div class="photo-description" v-if="photo.alt.length <= 10">{{ photo.alt }}</div>
       <div class="photo-description" v-else>{{ photo.alt.substring(0, 10) + '...' }}</div>
@@ -19,6 +19,8 @@
 import PhotoModal from "@/components/PhotoModal.vue";
 import ScrollReveal from 'scrollreveal'
 import {onMounted} from "vue";
+import {Minio} from "minio-js";
+import axios from "axios";
 
 export default {
   name: "PhotoPage",
@@ -43,6 +45,7 @@ export default {
   },
   created() {
     this.fetchPhotoList();
+    this.initMinioClient();
   },
   data() {
     return {
@@ -56,21 +59,65 @@ export default {
     PhotoModal
   },
   methods: {
+    // 初始化minio客户端
+    initMinioClient() {
+      this.minioClient = new Minio.Client({
+        endPoint: 'localhost', // MinIO服务器地址
+        port: 9000, // MinIO服务器端口
+        useSSL: false, // 是否使用SSL
+        accessKey: 'gAjYSAJDImJP9ZvqgJB6', // MinIO的accessKey
+        secretKey: 'cb8SkANxDCm90kdLz2puij4U7J8ZmlTBWAHYInT3' // MinIO的secretKey
+      });
+    },
     openModal(photo) {
       this.selectedPhoto = photo; // 设置选中的照片
     },
     closeModal() {
       this.selectedPhoto = null; // 清除选中的照片
     },
+    // 这边之后需要改成调用后端API
     async fetchPhotoList() {
       try {
-        const response = await fetch('src/assets/photos.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        // 使用Axios发送GET请求到后端API
+        const response = await axios.get('http://localhost:8005/photos/getAllPhotos');
+        if (response.status === 200) {
+          // 如果响应状态码为200，表示请求成功
+          this.photos = response.data; // 将获取到的照片列表赋值给photos
+          // 为每个照片对象添加URL
+          for (let photo of this.photos) {
+            photo.url = await this.fetchPhotoFromMinio(photo.src);
+            // console.log(photo.url);
+          }
+        } else {
+          throw new Error('Response status was not 200');
         }
-        this.photos = await response.json();
       } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
+      }
+    },
+    async fetchPhotoFromMinio(photoPath) {
+      try {
+        // 从MinIO存储桶中获取照片流，用getObject方法
+        // 获取指定photoPath的照片流。
+        const stream = await this.minioClient.getObject('myblogbucket', photoPath);
+        let photoData = [];
+        // 当有数据块(chunk)可读时，将其添加到photoData数组中。
+        stream.on('data', (chunk) => {
+          photoData.push(chunk);
+        });
+        return new Promise((resolve, reject) => {
+          stream.on('end', () => {
+            // 将照片数据转换为Blob对象
+            const blob = new Blob(photoData);
+            // 创建一个URL，可以用于<img>标签的src属性或下载链接
+            const photoURL = URL.createObjectURL(blob);
+            // resolve函数调用并传递这个URL
+            resolve(photoURL);
+          });
+          stream.on('error', reject);
+        });
+      } catch (error) {
+        console.error('Error fetching photo from MinIO:', error);
       }
     },
   }
