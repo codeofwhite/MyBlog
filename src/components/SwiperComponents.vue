@@ -52,7 +52,7 @@ export default defineComponent({
 
     img {
       display: flex;
-      width: 98%;
+      width: 99%;
     }
   }
 }

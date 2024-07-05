@@ -52,6 +52,8 @@ import {RouterView} from 'vue-router';
 import Navigation from "@/components/Navigation.vue";
 import AudioPlay from "@/components/AudioPlay.vue";
 import router from "@/router/index.js"; // 路由跳转
+import {L2Dwidget} from 'live2d-widget'
+
 
 // 显示弹窗
 const showPopup1 = ref(true);
@@ -66,6 +68,26 @@ setTimeout(() => {
 // onMounted代替created， 用于杀死动画
 onMounted(() => {
   document.body.removeChild(document.getElementById('Loading')) // 加载页面完后移除加载动画
+  L2Dwidget
+      //此处是对点击人物时触发事件的监听
+      .on('*', (name) => {
+
+        console.log('%c 你点击了 ' + '%c -> ' + name, 'background: #222; color: yellow',
+            'background: #fff; color: #000')
+      })
+      .init({
+        model: {
+          jsonPath: 'https://cdn.jsdelivr.net/gh/wangsrGit119/wangsr-image-bucket/L2Dwidget/live2d-widget-model-wanko/assets/wanko.model.json'
+        },
+        display: {
+          //人物的属性配置
+          position: 'right',
+        },
+        mobile: {
+          show: true, // 移动端是否展示
+          scale: 0.5, // 缩放比例
+        },
+      })
 })
 </script>
 

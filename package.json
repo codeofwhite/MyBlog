@@ -21,6 +21,7 @@
     "express-serve-static-core": "^0.1.1",
     "gray-matter": "^4.0.3",
     "html-loader": "^5.0.0",
+    "live2d-widget": "^3.1.4",
     "markdown-it": "^14.1.0",
     "markdown-loader": "^8.0.0",
     "md-editor-v3": "^4.17.0",
