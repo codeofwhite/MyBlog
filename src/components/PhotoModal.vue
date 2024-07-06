@@ -34,8 +34,8 @@ export default {
 .modal-content {
   position: relative;
   background-color: #e9fffd;
-  margin: 10% auto;
-  padding: 20px;
+  margin: 5% auto;
+  padding: 10px;
   border: 1px solid #888;
   border-radius: 10px;
   width: 80%;

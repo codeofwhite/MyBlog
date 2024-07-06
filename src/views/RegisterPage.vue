@@ -88,7 +88,11 @@ export default {
             });
             // 检查后端返回的是否成功标识
             if (response.data.success) {
-              console.log('注册成功', response);
+              // 注册成功提示
+              this.$message({
+                message: '注册成功！',
+                type: 'success'
+              });
               this.$router.push('/login');
             } else {
               // 注册失败处理

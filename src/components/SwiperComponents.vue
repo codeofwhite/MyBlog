@@ -6,7 +6,7 @@
       effect="fade"
       :navigation="false"
       :pagination="{ clickable: true }"
-      :autoplay="{ delay: 2500, disableOnInteraction: false }"
+      :autoplay="{ delay: 3000, disableOnInteraction: false }"
   >
     <swiper-slide class="slide" v-for="index in 5" :key="index">
       <img :src="`src/assets/images/swiper-img/${index}.png`" alt=""/>

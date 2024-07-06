@@ -1,6 +1,9 @@
 <template>
   <div class="user-info-body" v-if="isLoggedIn">
     <div class="user-info-panel">
+      <div class="user-avatar">
+        <img :src="userProfile.avatar" alt="User Avatar">
+      </div>
       <div class="user-info-title">用户信息</div>
       <el-form>
         <!-- 用户邮箱显示 -->
@@ -42,6 +45,7 @@ export default {
     const userProfile = reactive({
       nickname: '',
       phone: '',
+      avatar: 'src/assets/images/photoPage-img/codeofwhite.jpg',
       // ...其他个人信息字段...
     });
 
@@ -85,7 +89,7 @@ export default {
 }
 
 .user-info-panel {
-  padding: 2rem;
+  padding: 1rem;
   max-width: 600px;
   width: 100%;
   background: #fff; /* 白色背景 */
@@ -94,9 +98,23 @@ export default {
   margin: 1rem;
 }
 
+.user-avatar {
+  display: flex;
+  justify-content: center; /* 头像居中 */
+  margin-bottom: 1rem; /* 头像与信息区域间距 */
+}
+
+.user-avatar img {
+  border-radius: 50%; /* 圆形头像 */
+  width: 100px; /* 头像宽度 */
+  height: 100px; /* 头像高度 */
+  object-fit: cover; /* 裁剪头像以适应容器 */
+}
+
 .user-info-title {
   font-size: 1.5rem;
   color: #333; /* 深色文字 */
+  margin-top: 0; /* 移除标题上方的间距 */
   margin-bottom: 1rem;
   text-align: center;
 }

@@ -8,15 +8,10 @@
     </div>
     <!-- 使用v-html指令渲染Markdown格式的博客内容 -->
     <div class="markdown-preview" v-html="markdownToHtml"></div>
-    <!-- 点赞按钮和显示点赞次数的容器 -->
-    <div class="likes-section">
-      <button @click="incrementLikes">喜欢</button>
-      <!-- 弹幕开关按钮 -->
-      <button class="danmuButton" @click="toggleDanmu">切换弹幕</button>
-      <span class="likes-count">喜欢数：{{ likes }}</span>
-    </div>
+    <LikeSection></LikeSection>
     <!-- 弹幕输入区域 -->
     <div class="danmu-input-section">
+      <button class="danmuButton" @click="toggleDanmu">切换弹幕</button>
       <input v-model="newDanmu" placeholder="写弹幕..."/>
       <button @click="insertDanmu">发送弹幕</button>
     </div>
@@ -41,10 +36,12 @@ import 'md-editor-v3/lib/style.css';
 import vueDanmaku from 'vue3-danmaku'
 import axios from 'axios';
 import {Minio} from "minio-js";
+import LikeSection from "@/components/LikeSection.vue";
 
 export default {
   name: "BlogDetail",
   components: {
+    LikeSection,
     vueDanmaku,
   },
   created() {
@@ -109,6 +106,10 @@ export default {
 
       // 插入图片有问题=>已经解决，图像需要放上网
     },
+    // 切换弹幕显示
+    toggleDanmu() {
+      this.showDanmu = !this.showDanmu; // 切换弹幕的显示状态
+    },
     // 插入新的弹幕并且显示
     async insertDanmu() {
       if (!this.userEmail) {
@@ -141,19 +142,6 @@ export default {
         this.danmus = response.data; // 设置弹幕数组
       } catch (error) {
         console.error('获取弹幕失败:', error);
-      }
-    },
-    // 用户点赞的行为
-    incrementLikes() {
-      if (this.isLoggedIn) {
-        if (!this.likeState) {
-          this.likes++; // 增加点赞次数
-          this.likeState = true;
-        } else {
-          alert('您已经点过赞了！')
-        }
-      } else {
-        alert('请登录后再点赞！');
       }
     },
     // 提交评论
@@ -193,9 +181,6 @@ export default {
       } catch (error) {
         console.error('获取评论失败:', error);
       }
-    },
-    toggleDanmu() {
-      this.showDanmu = !this.showDanmu; // 切换弹幕的显示状态
     },
   },
   computed: {
@@ -300,17 +285,6 @@ button:hover, a:hover {
   background: var(--background-color);
 }
 
-/* 点赞部分的布局 */
-.likes-section {
-  position: fixed; /* 固定定位 */
-  bottom: 8px; /* 距离底部px */
-  left: 8%; /* 调整横坐标 */
-  transform: translateX(-50%); /* 用于确保元素水平居中 */
-  display: flex;
-  align-items: center;
-  z-index: 1000; /* 确保点赞按钮在其他内容之上 */
-}
-
 /* 点赞按钮样式 */
 button {
   background-color: var(--theme-color); /* 使用主题颜色 */
@@ -329,15 +303,6 @@ button {
 button:hover {
   transform: scale(1.05); /* 鼠标悬停时轻微放大 */
   background-color: var(--accent-color); /* 鼠标悬停时改变背景色 */
-}
-
-/* 点赞次数显示样式 */
-.likes-count {
-  font-size: 1.2em;
-  margin-left: 10px;
-  color: var(--text-color);
-  font-style: italic;
-  margin-right: 1em;
 }
 
 .comments-section {

@@ -39,7 +39,7 @@ export default {
         content: '', // 内容
         image: null // 存储图片的数据
       },
-      folderPath: 'images/', // minio文件夹路径
+      folderPath: 'images/gaveMeImg', // minio文件夹路径
       gaveMeList: [] // 用于存储从接口获取的gaveMe内容
     };
   },

@@ -47,21 +47,25 @@ onMounted(() => {
 })
 
 const timelineItems = ref([
-  {date: '2024-01-01', image: 'src/assets/images/photoPage-img/codeofwhite.jpg', description: '新年快乐！'},
+  {
+    date: '2024-01-01',
+    image: 'src/assets/images/photoPage-img/codeofwhite.jpg',
+    description: '新年快乐！'
+  },
   {
     date: '2024-06-30',
     image: 'src/assets/images/photoPage-img/codeofwhite.jpg',
-    description: '是倩倩juju回家的日子！呜呜呜呜'
+    description: '倩倩juju回家的日子'
   },
   {
-    date: '2024-07-01',
+    date: '2024-07-02',
     image: 'src/assets/images/photoPage-img/codeofwhite.jpg',
-    description: '努力搬砖'
+    description: '努力搬砖中'
   },
   {
     date: '2024-07-10',
     image: 'src/assets/images/photoPage-img/codeofwhite.jpg',
-    description: '验收啦'
+    description: '今天开始验收啦'
   },
 // ...更多时间轴项...
 ]);
