@@ -113,11 +113,33 @@ onMounted(() => {
 
 h1 {
   font-size: 2rem; /* 字体大小 */
-  color: #333; /* 字体颜色 */
+  animation: colorChange 10s infinite; /* 应用动态颜色动画 */
   margin: 0; /* 去除默认外边距 */
-  font-weight: 300; /* 字体粗细 */
+  font-weight: bold; /* 字体粗细 */
 }
 
+@keyframes colorChange {
+  0% {
+    color: #6affbe;
+  }
+  /* 深蓝色 */
+  25% {
+    color: #90fff1;
+  }
+  /* 柔和的绿色 */
+  50% {
+    color: #1bffc4;
+  }
+  /* 淡粉色 */
+  75% {
+    color: #1bddff;
+  }
+  /* 金色 */
+  100% {
+    color: #00fff7;
+  }
+  /* 深蓝色 */
+}
 
 .footer {
   background-color: #00a6be; /* 淡粉色背景 */
