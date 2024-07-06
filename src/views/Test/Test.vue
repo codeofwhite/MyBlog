@@ -11,8 +11,7 @@
               </div>
               <div class="form-group">
                 <label for="blogCategory">博客类别</label>
-                <input type="text" class="form-control" id="blogCategory" v-model="blog.category"
-                       placeholder="输入博客类别">
+                <input type="text" class="form-control" id="blogCategory" v-model="blog.category" placeholder="输入博客类别">
               </div>
               <div class="form-group">
                 <label for="blogFile">博客文件</label>
@@ -37,7 +36,7 @@ export default {
   data() {
     return {
       blog: {
-        imgSrc: 'src/assets/images/photoPage-img/codeofwhite.jpg',
+        imgSrc:'src/assets/images/photoPage-img/codeofwhite.jpg',
         title: '',
         category: '',
         // 其他博客数据...
@@ -51,7 +50,7 @@ export default {
     },
     submitBlog() {
       const formData = new FormData();
-      formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
+      formData.append('blogs', new Blob([JSON.stringify(this.blog)], { type: 'application/json' }));
       formData.append('file', this.file);
 
       axios.post('http://localhost:8005/blogs/insertBlog', formData, {

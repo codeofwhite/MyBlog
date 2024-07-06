@@ -82,7 +82,8 @@ export default {
 
         if (response.data === 'success') {
           console.log('留言提交成功');
-// 清空表单或进行其他操作...
+          // 清空表单或进行其他操作...
+          location.reload()
         } else {
           console.error('留言提交失败');
         }
