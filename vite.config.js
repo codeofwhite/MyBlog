@@ -7,6 +7,7 @@ import markdown from 'vite-plugin-md';
 import Pages from 'vite-plugin-pages'
 
 // https://vitejs.dev/config/
+// 配置读取markdown文件
 export default defineConfig({
     plugins: [
         vue({
