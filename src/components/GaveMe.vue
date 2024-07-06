@@ -21,7 +21,7 @@
     <div v-for="gaveMeItem in gaveMeList" :key="gaveMeItem.id" class="gave-me-item">
       <img :src="gaveMeItem.url" alt="GaveMe Image" class="gave-me-image">
       <div class="gave-me-content">{{ gaveMeItem.content }}</div>
-      <div class="gave-me-content">{{ gaveMeItem.userEmail }}</div>
+      <div class="gave-me-content">{{ gaveMeItem.userEmail || '匿名' }}</div>
     </div>
   </div>
 </template>

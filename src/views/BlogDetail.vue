@@ -108,18 +108,14 @@ export default {
       }
 
       // 插入图片有问题=>已经解决，图像需要放上网
-      // const markdownContent = await import(`../assets/markdowns/${blogId}.md?raw`);
-      // 根据id从后端API获取博客详情
-      // 这里是模拟的API调用
-      // 实际应用中，您需要替换为真实的HTTP请求
-      // 例如使用axios.get('/api/blog/' + blogId)...
-      // this.blog = {
-      //   title: '博客标题：' + blogId,
-      //   content: markdownContent.default
-      // };
     },
     // 插入新的弹幕并且显示
     async insertDanmu() {
+      if (!this.userEmail) {
+        alert('请登录后再发布弹幕！');
+        return; // 如果用户未登录，显示提示并退出函数
+      }
+
       if (this.newDanmu.trim()) {
         try {
           const response = await axios.post('http://localhost:8004/danmu/insertDanmu', {
@@ -162,12 +158,17 @@ export default {
     },
     // 提交评论
     async submitComment() {
+      // 检查用户是否已登录
+      if (!this.userEmail) {
+        alert('请先登录再发表评论！');
+        return; // 如果用户未登录，显示提示并退出函数
+      }
       if (this.newComment.trim()) {
         try {
           const response = await axios.post('http://localhost:8005/comments/insertComment', JSON.stringify({
-            userEmail: this.userEmail, // 这里可以替换为用户的名字或保持匿名
-            comment: this.newComment,
-            blogId: this.blogId
+            userEmail: this.userEmail, // 用户的邮箱
+            comment: this.newComment, // 评论内容
+            blogId: this.blogId // 博客ID
           }), {
             headers: {
               "Content-Type": "application/json"
