@@ -1,0 +1,42 @@
+[
+  {
+    "_id": 1,
+    "imgSrc": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "title": "如何搭建vue.js环境",
+    "category": "技术",
+    "createDate": "",
+    "updateDate": ""
+  },
+  {
+    "_id": 2,
+    "imgSrc": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "title": "如何理解神经网络的原理",
+    "category": "数学",
+    "createDate": "",
+    "updateDate": ""
+  },
+  {
+    "_id": 3,
+    "imgSrc": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "title": "以良好的心态面对人生",
+    "category": "校园生活",
+    "createDate": "",
+    "updateDate": ""
+  },
+  {
+    "_id": 4,
+    "imgSrc": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "title": "搭建SpringCloud",
+    "category": "技术",
+    "createDate": "",
+    "updateDate": ""
+  },
+  {
+    "_id": "668571abe9e03d00b86579f2",
+    "imgSrc": "src/assets/images/photoPage-img/codeofwhite.jpg",
+    "title": "id测试",
+    "category": "Windows",
+    "createDate": "",
+    "updateDate": ""
+  }
+]
