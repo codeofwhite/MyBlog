@@ -114,9 +114,11 @@ const onLogin = async () => {
           }
           // 更新 Vuex 状态
           store.commit('setLoggedIn', true);
+          store.commit('setUserEmail', response.data.uemail);
           console.log('登录成功', response);
           // 刷新
-          location.reload();
+          // location.reload();
+          
           // 登录成功后的操作，比如页面跳转
           // 重定向到主页或其他页面
           // this.$router.push('/home');

@@ -71,10 +71,15 @@ export default {
               }
             })
             .then(response => {
-              this.questions.push(response.data);
+              const newQuestion = {
+                question: this.newQuestion.content,
+                userEmail: this.userEmail,
+                createDate: new Date().toISOString() // 获取当前时间的ISO字符串
+              };
+              // 直接将新问题添加到questions数组中
+              this.questions.unshift(newQuestion);
               this.newQuestion.content = '';
               this.isLoading = false;
-              location.reload();
             })
             .catch(error => {
               console.error('There was an error posting the question:', error);
