@@ -8,6 +8,7 @@ import PhotoManager from "@/views/PhotoManager.vue";
 import UserManager from "@/views/UserManager.vue";
 import EditSingleBlog from "@/components/EditSingleBlog.vue";
 import RegisterPage from "@/views/RegisterPage.vue";
+import CommentManager from "@/views/CommentManager.vue";
 
 const routes = [
     {
@@ -29,6 +30,11 @@ const routes = [
         path:'/register',
         name:'register',
         component: RegisterPage
+    },
+    {
+        path:'/commentManager/:id',
+        name:'CommentManager',
+        component: CommentManager
     },
 ]
 

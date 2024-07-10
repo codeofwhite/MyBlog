@@ -12,6 +12,11 @@
           <label for="blogCategory">博客类别</label>
         </div>
         <div class="input-group file-input-group">
+          <input class="file-input" type="file" id="blogImage" @change="handleImageUpload"/>
+          <label for="blogImage" class="file-input-label">选择图片</label>
+          <span class="file-name" v-if="imageName">{{ imageName }}</span>
+        </div>
+        <div class="input-group file-input-group">
           <input class="file-input" type="file" id="blogFile" @change="handleFileUpload"/>
           <label for="blogFile" class="file-input-label">选择文件</label>
           <span class="file-name" v-if="fileName">{{ fileName }}</span>
@@ -39,6 +44,8 @@ export default {
       },
       file: null,
       fileName: '', // 用于存储文件名的数据属性
+      image: null,
+      imageName: '', // 用于存储图片文件名的数据属性
     };
   },
   setup() {
@@ -58,10 +65,21 @@ export default {
       const file = event.target.files[0];
       this.fileName = file ? file.name : ''; // 更新文件名
     },
+    // 图片的input
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.image = file;
+        this.imageName = file.name;
+      }
+    },
     submitBlog() {
       if (this.userType == 1) {
         const formData = new FormData();
         formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
+        if (this.image) {
+          formData.append('blogImg', this.image);
+        }
         formData.append('file', this.file);
 
         axios.post('http://localhost:8005/blogs/insertBlog', formData, {

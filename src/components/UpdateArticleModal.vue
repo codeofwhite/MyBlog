@@ -94,12 +94,12 @@ export default {
       })
           .then(response => {
             if (response.data === 'success') {
-              this.$message.success('图片上传成功！');
+              this.$message.success('博客上传成功！');
             }
           })
           .catch(error => {
             console.error('上传失败:', error);
-            this.$message.error('图片上传失败！');
+            this.$message.error('博客上传失败！');
           });
     },
   }

@@ -5,7 +5,7 @@
       <div class="user-login">
         <!-- 圆形的登录图标 -->
         <router-link to="/login">
-          <img src="@/assets/images/logo.png" alt="User Login"/>
+          <div class="user-icon">{{ userInitial }}</div>
         </router-link>
       </div>
     </div>
@@ -34,7 +34,15 @@ export default {
   },
   created() {
     document.body.removeChild(document.getElementById('Loading')) // 加载页面完后移除加载动画
-  }
+  },
+  computed:{
+    userInitial() {
+      // 获取用户名称的首字母
+      // 确保 user_email 已定义且不为空
+      const email = this.$store.state.uemail;
+      return email ? email.charAt(0).toUpperCase() : '登录';
+    },
+  },
 }
 </script>
 
@@ -82,4 +90,16 @@ export default {
   margin-bottom: 50px; /* 确保底部栏不会遮挡内容 */
 }
 
+.user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 创建圆形 */
+  background-color: #5c6bc0; /* 背景颜色 */
+  color: #fff; /* 文字颜色 */
+  font-weight: bold; /* 字体加粗 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 添加过渡效果 */
+}
 </style>

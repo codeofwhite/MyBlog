@@ -13,6 +13,11 @@
           <input type="text" id="blogCategory" v-model="blog.category" placeholder="博客类别"/>
           <label for="blogCategory">博客类别</label>
         </div>
+        <div class="input-group file-input-group">
+          <input class="file-input" type="file" id="blogImage" @change="handleImageUpload"/>
+          <label for="blogImage" class="file-input-label">选择图片</label>
+          <span class="file-name" v-if="imageName">{{ imageName }}</span>
+        </div>
         <!--        <div class="input-group file-input-group">-->
         <!--          <input class="file-input" type="file" id="blogFile" @change="handleFileUpload"/>-->
         <!--          <label for="blogFile" class="file-input-label">选择文件</label>-->
@@ -44,6 +49,8 @@ export default {
       },
       file: null,
       fileName: '', // 用于存储文件名的数据属性
+      image: null,
+      imageName: '', // 用于存储图片文件名的数据属性
     };
   },
   setup() {
@@ -58,9 +65,19 @@ export default {
     }
   },
   methods: {
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.image = file;
+        this.imageName = file.name;
+      }
+    },
     submitBlog() {
       if (this.userType == 1) {
         const formData = new FormData();
+        if (this.image) {
+          formData.append('blogImg', this.image);
+        }
         const textBlob = new Blob([this.text], {type: 'text/markdown'});
         formData.append('file', textBlob, 'blog.md');
         formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
@@ -185,5 +202,28 @@ export default {
 
 .close-button:hover {
   background-color: #9e9e9e;
+}
+
+.file-input-group {
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  display: none; /* 隐藏原生文件输入 */
+}
+
+.file-input-label {
+  display: block;
+  background-color: #f9a825;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.file-name {
+  display: block;
+  margin-top: 10px;
 }
 </style>

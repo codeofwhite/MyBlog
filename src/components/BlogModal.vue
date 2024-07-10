@@ -15,6 +15,7 @@
       <div class="modal-footer">
         <button class="edit-button" @click="editBlog">修改</button>
         <button class="delete-button" @click="deleteBlog">删除</button>
+        <button class="comment-button" @click="manageComments">管理评论</button>
       </div>
     </div>
   </div>
@@ -55,6 +56,17 @@ const editBlog = () => {
     console.log('修改博客', props.blog.id);
   } else {
     ElMessage.error('权限不足，无法修改博客');
+  }
+};
+
+const manageComments = () => {
+  // 使用router.push方法导航到博文的修改页面
+  console.log(userType.value)
+  if (userType.value == 1) {
+    router.push({name: 'CommentManager', params: {id: props.blog.id}});
+    console.log('管理评论', props.blog.id);
+  } else {
+    ElMessage.error('权限不足，无法管理评论');
   }
 };
 
@@ -135,7 +147,7 @@ const deleteBlog = async () => {
   text-align: right;
 }
 
-.edit-button, .delete-button {
+.edit-button, .delete-button, .comment-button {
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
   border: none;
@@ -160,5 +172,14 @@ const deleteBlog = async () => {
 
 .delete-button:hover {
   background-color: #c82333;
+}
+
+.comment-button{
+  background-color: #09b46a;
+  color: #fff;
+}
+
+.comment-button:hover {
+  background-color: #6affbe;
 }
 </style>

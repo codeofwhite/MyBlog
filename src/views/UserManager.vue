@@ -56,6 +56,8 @@
 import axios from 'axios';
 import {ref, computed, onMounted} from 'vue';
 import UserEditModal from "@/components/UserEditModal.vue";
+import {useStore} from "vuex";
+import {ElMessage} from "element-plus";
 
 const users = ref([]);
 const search = ref('');
@@ -63,6 +65,12 @@ const showModal = ref(false);
 const userDetails = ref({});
 const showEditModal = ref(false);
 const selectedUser = ref({});
+
+// 状态管理
+const store = useStore();
+
+// 从 Vuex 获取用户类型
+const userType = computed(() => store.state.user_type);
 
 onMounted(async () => {
   try {
@@ -74,8 +82,12 @@ onMounted(async () => {
 });
 
 const openEditModal = (user) => {
-  selectedUser.value = user;
-  showEditModal.value = true;
+  if (userType.value == 1) {
+    selectedUser.value = user;
+    showEditModal.value = true;
+  }else{
+    ElMessage.error('权限不足，无法修改用户信息');
+  }
 };
 
 // 创建一个方法来根据值返回对应的文本
@@ -88,11 +100,15 @@ const filteredUsers = computed(() => {
 });
 
 const viewUser = (userId) => {
-  const user = users.value.find(u => u.id === userId);
-  if (user) {
-    // 直接将user对象赋值给userDetails
-    userDetails.value = user;
-    showModal.value = true;
+  if (userType.value == 1) {
+    const user = users.value.find(u => u.id === userId);
+    if (user) {
+      // 直接将user对象赋值给userDetails
+      userDetails.value = user;
+      showModal.value = true;
+    }
+  }else{
+    ElMessage.error('权限不足，无法查看用户详细信息');
   }
 };
 

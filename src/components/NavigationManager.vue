@@ -69,6 +69,7 @@ export default {
       this.activeSubMenu = this.activeSubMenu === menuName ? null : menuName;
     },
   },
+  computed: {}
 };
 </script>
 
