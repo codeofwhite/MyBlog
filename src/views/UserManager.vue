@@ -133,6 +133,7 @@ button {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-right: 5px;
 }
 
 button:hover {
