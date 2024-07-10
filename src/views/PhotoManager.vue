@@ -5,6 +5,18 @@
       <input type="file" @change="handleFileUpload"/>
       <input type="text" v-model="photoDescription" placeholder="输入图片描述"/>
       <button @click="submitUpload">上传到服务器</button>
+      <input type="text" v-model="searchQuery" placeholder="搜索图片描述..." class="search-input"/>
+      <!-- 搜索结果展示区域 -->
+      <div class="search-results" v-if="searchQuery">
+        <div v-if="filteredPhotos.length > 0" class="image-grid">
+          <div v-for="photo in filteredPhotos" :key="photo.id" class="image-item">
+            <img :src="photo.url" :alt="photo.alt"/>
+            <div class="photo-description">{{ photo.alt }}</div>
+          </div>
+        </div>
+        <p class="no-photos" v-else>没有找到此图片。</p>
+      </div>
+      <!-- 图片列表 -->
       <div class="image-list">
         <div v-for="photo in photos" :key="photo.id" class="image-item">
           <img :src="photo.url" :alt="photo.alt" @click="confirmDelete(photo.id)"/>
@@ -31,6 +43,7 @@ export default {
       selectedFile: null,
       photos: [],
       photoDescription: '', // 添加图片描述的数据绑定
+      searchQuery: '', // 新增搜索查询数据属性
     };
   },
   setup() {
@@ -46,6 +59,17 @@ export default {
   },
   created() {
     this.initMinioClient();
+  },
+  computed: {
+    // 新增计算属性来过滤图片列表
+    filteredPhotos() {
+      if (this.searchQuery) {
+        return this.photos.filter(photo =>
+            photo.alt.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+      return this.photos;
+    },
   },
   methods: {
     // 初始化minio客户端
@@ -228,5 +252,38 @@ export default {
   color: white;
   text-align: center;
   padding: 5px 0;
+}
+
+.search-results {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.no-photos {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
 }
 </style>

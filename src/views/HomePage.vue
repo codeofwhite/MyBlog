@@ -51,76 +51,57 @@ import {ref} from 'vue';
 const welcomeMessage = ref('欢迎来到CodeMist的后台管理空间!');
 
 const faqs = ref([
-  { id: 1, question: '如何重置我的密码？', answer: '您可以通过点击登录页面的“忘记密码”链接来重置密码。' },
-  { id: 2, question: '如何更改我的邮箱地址？', answer: '您可以在账户设置中更新您的邮箱地址。' },
+  {id: 1, question: '如何重置我的密码？', answer: '您可以通过点击登录页面的“忘记密码”链接来重置密码。'},
+  {id: 2, question: '如何更改我的邮箱地址？', answer: '您可以在账户设置中更新您的邮箱地址。'},
 // ...更多问题...
 ]);
 </script>
 
 <style scoped>
 .admin-dashboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 50px;
   background-color: #ecf0f1;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.welcome-container {
-  margin-top: 50px;
-  padding: 40px;
+.welcome-container, .system-status, .update-announcements, .help-center {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 600px;
-}
-
-.system-status, .update-announcements, .help-center {
-  margin-top: 20px;
-  margin-bottom: 10px;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 600px;
 }
 
-h1 {
+.welcome-container {
+  grid-column: 1 / -1; /* 占满整行 */
+}
+
+.system-status {
+  grid-column: span 2; /* 占据两列 */
+}
+
+.update-announcements, .help-center {
+  grid-column: span 1; /* 占据一列 */
+}
+
+h1, h2, h3 {
   color: #34495e;
-  margin-bottom: 10px;
 }
 
-h2 {
-  color: #16a085;
-  margin-bottom: 5px;
-}
-
-p {
+p, a, .faq-container details {
   color: #7f8c8d;
-  line-height: 1.6;
-}
-
-a {
-  color: #3498db;
-  text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
 }
 
-.faq-container {
-  margin-top: 20px;
-}
-
 .faq-container details {
   background-color: #f9f9f9;
-  padding: 10px;
   border-radius: 5px;
+  padding: 10px;
   margin-bottom: 10px;
 }
 

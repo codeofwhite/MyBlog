@@ -121,9 +121,12 @@ const deleteBlog = async () => {
 }
 
 .blog-image {
-  max-width: 70%;
+  max-width: 100%;
+  max-height: 300px; /* 高度最大不超过300像素，解决某些图片显示太大的问题 */
   height: auto;
-  margin-bottom: 1rem;
+  display: block; /* Ensure it's a block element */
+  object-fit: contain; /* Ensure aspect ratio is preserved */
+  margin: 0 auto; /* Center the image */
 }
 
 .modal-footer {

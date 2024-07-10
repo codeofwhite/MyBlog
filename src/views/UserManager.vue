@@ -1,4 +1,6 @@
 <template>
+  <UserEditModal :selectedUser="selectedUser" :show="showEditModal" @update:show="showEditModal = $event"
+                 @user-updated="handleUserUpdated"/>
   <div class="user-management">
     <h1>用户管理</h1>
     <input type="text" v-model="search" placeholder="搜索用户名..." class="search-input"/>
@@ -24,8 +26,7 @@
         <td>{{ getTextForValue(user.utype, {'0': '普通用户', '1': '管理员'}) }}</td>
         <td>
           <button @click="viewUser(user.id)">查看</button>
-          <button @click="viewUser(user.id)">修改</button>
-          <button @click="viewUser(user.id)">删除</button>
+          <button @click="openEditModal(user)">修改</button>
           <!-- 其他操作按钮 -->
         </td>
       </tr>
@@ -33,12 +34,12 @@
     </table>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <!--   尝试了几种方式，这种方式是最行的，其他直接出Bug。比如写成几个不同的方法，不用模板     -->
         <span class="close" @click="closeModal">×</span>
         <h2>用户详情</h2>
-        <p>用户头像: {{ userDetails.avatar }}</p>
+        <p>用户头像地址: {{ userDetails.avatar }}</p>
         <p>ID: {{ userDetails.id }}</p>
         <p>用户名: {{ userDetails.uname }}</p>
+        <!--   用模板调用，不然会出错不显示，可能用watch也行     -->
         <p>用户状态: {{ getTextForValue(userDetails.status, {'0': '正常', '1': '停用'}) }}</p>
         <p>用户性别: {{ getTextForValue(userDetails.sex, {'0': '女', '1': '男'}) }}</p>
         <p>用户身份: {{ getTextForValue(userDetails.utype, {'0': '普通用户', '1': '管理员'}) }}</p>
@@ -54,11 +55,14 @@
 <script setup>
 import axios from 'axios';
 import {ref, computed, onMounted} from 'vue';
+import UserEditModal from "@/components/UserEditModal.vue";
 
 const users = ref([]);
 const search = ref('');
 const showModal = ref(false);
 const userDetails = ref({});
+const showEditModal = ref(false);
+const selectedUser = ref({});
 
 onMounted(async () => {
   try {
@@ -68,6 +72,11 @@ onMounted(async () => {
     console.error('获取用户列表失败:', error);
   }
 });
+
+const openEditModal = (user) => {
+  selectedUser.value = user;
+  showEditModal.value = true;
+};
 
 // 创建一个方法来根据值返回对应的文本
 const getTextForValue = (value, options) => {
@@ -85,6 +94,14 @@ const viewUser = (userId) => {
     userDetails.value = user;
     showModal.value = true;
   }
+};
+
+const handleUserUpdated = async (updatedUser) => {
+  // 处理用户更新逻辑，例如更新用户列表
+  console.log('用户已更新', updatedUser);
+  // 可能需要刷新用户列表
+  const response = await axios.get('http://localhost:8004/user/getAllUser');
+  users.value = response.data;
 };
 
 const closeModal = () => {
@@ -133,7 +150,7 @@ button {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-right: 5px;
+  margin: 10px;
 }
 
 button:hover {
@@ -141,24 +158,40 @@ button:hover {
 }
 
 .modal {
-  display: block; /* 默认不显示 */
-  position: fixed;
-  z-index: 1;
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  padding-top: 60px;
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 5% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 80%; /* Could be more or less, depending on screen size */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
 }
 
 .close {
@@ -173,5 +206,16 @@ button:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+h2 {
+  color: #5c5edc;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #333;
+  font-family: 'Open Sans', sans-serif;
 }
 </style>

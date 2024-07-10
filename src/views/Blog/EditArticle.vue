@@ -1,8 +1,13 @@
 <template>
   <div class="edit-article">
     <input type="text" v-model="searchQuery" placeholder="搜索文章标题..." class="search-input"/>
+    <!-- 如果搜索结果为空，则直接显示提示信息 -->
+    <p class="no-blogs" v-if="noBlogsFound">没有找到相关博客。</p>
     <section v-for="category in blogCategories" :key="category">
-      <h2 @click="toggleCategory(category)">{{ category }}</h2>
+      <h2
+          @click="toggleCategory(category)">{{ category }}
+        <span :class="{'arrow-down': isActiveCategory(category), 'arrow-right': !isActiveCategory(category)}"></span>
+      </h2>
       <transition name="expand">
         <div class="blog-grid" v-if="isActiveCategory(category)">
           <div class="blog-card" v-for="blog in filteredBlogs(category)" :key="blog.id" @click="selectBlog(blog)">
@@ -11,6 +16,10 @@
             <p class="blog-date">创建日期: {{ new Date(blog.createDate).toLocaleDateString() }}</p>
             <p class="blog-date">更新日期: {{ new Date(blog.updateDate).toLocaleDateString() }}</p>
             <p class="blog-likes">点赞数: {{ blog.likesCount }}</p>
+          </div>
+          <!-- 如果搜索结果为空，则显示提示信息 -->
+          <div class="no-blogs" v-if="filteredBlogs(category).length === 0">
+            <p>没有找到相关博客。</p>
           </div>
         </div>
       </transition>
@@ -128,19 +137,76 @@ const fetchPhotoFromMinio = async (photoPath) => {
     console.error('Error fetching photo from MinIO:', error);
   }
 };
+
+// 新增计算属性来判断是否有博客被找到
+const noBlogsFound = computed(() => {
+  return searchQuery.value && !blogs.value.some(blog =>
+      blog.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 </script>
 
 <style scoped>
+.admin-dashboard {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.welcome-container,
+.system-status,
+.update-announcements,
+.help-center {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.welcome-container h1,
+.system-status h2,
+.update-announcements h2,
+.help-center h2 {
+  color: #333333;
+  margin-bottom: 1rem;
+}
+
+.welcome-container p,
+.system-status ul,
+.update-announcements p,
+.help-center p {
+  color: #555555;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+.system-status ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.system-status li,
+.update-announcements p,
+.help-center p {
+  margin-bottom: 0.5rem;
+}
+
+.system-status li strong,
+.update-announcements p strong,
+.help-center p strong {
+  font-weight: 600;
+}
+
 .search-input {
   width: 100%;
   padding: 10px;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.edit-article {
-  padding: 1rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .blog-grid {
@@ -150,14 +216,14 @@ const fetchPhotoFromMinio = async (photoPath) => {
 }
 
 .blog-card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .blog-card:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .blog-image {
@@ -166,29 +232,56 @@ const fetchPhotoFromMinio = async (photoPath) => {
   object-fit: cover;
 }
 
-.blog-date, .blog-likes {
+.blog-date,
+.blog-likes {
   padding: 0.5rem;
   font-size: 0.9rem;
+  color: #666;
+}
+
+.arrow-right, .arrow-down {
+  display: inline-block;
+  margin-left: 8px;
+  border: solid #333;
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.arrow-down {
+  transform: rotate(-135deg);
 }
 
 h2 {
-  margin-top: 2rem;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* 添加过渡动画样式 */
-.expand-enter-active, .expand-leave-active {
-  transition: all 0.5s ease;
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
 }
 
-.expand-enter, .expand-leave-to {
-  height: 0;
+.expand-enter,
+.expand-leave-to {
+  transform: scaleY(0);
+  transform-origin: top;
   opacity: 0;
-  padding: 0;
 }
 
-.expand-enter-to, .expand-leave {
-  height: auto;
+.expand-enter-to,
+.expand-leave {
+  transform: scaleY(1);
   opacity: 1;
-  padding: 1rem;
+}
+
+.no-blogs {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
 }
 </style>
