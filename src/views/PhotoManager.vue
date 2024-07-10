@@ -3,6 +3,7 @@
     <div class="header">图片管理器（点击可选择删除图片）</div>
     <div class="main-content">
       <input type="file" @change="handleFileUpload"/>
+      <input type="text" v-model="photoDescription" placeholder="输入图片描述"/>
       <button @click="submitUpload">上传到服务器</button>
       <div class="image-list">
         <div v-for="photo in photos" :key="photo.id" class="image-item">
@@ -20,14 +21,28 @@
 import axios from 'axios';
 import {ElMessage, ElMessageBox} from 'element-plus';
 import {Minio} from "minio-js";
+import {computed} from "vue";
+import {useStore} from "vuex";
 
 export default {
   name: 'PhotoManager',
   data() {
     return {
       selectedFile: null,
-      photos: []
+      photos: [],
+      photoDescription: '', // 添加图片描述的数据绑定
     };
+  },
+  setup() {
+    // 状态管理
+    const store = useStore();
+
+    // 从 Vuex 获取用户类型
+    const userType = computed(() => store.state.user_type);
+
+    return {
+      userType
+    }
   },
   created() {
     this.initMinioClient();
@@ -47,21 +62,35 @@ export default {
       this.selectedFile = event.target.files[0];
     },
     submitUpload() {
-      const formData = new FormData();
-      formData.append('fileImg', this.selectedFile);
-      formData.append('folderPath', 'your_folder_path_here'); // 替换为实际的文件夹路径
+      if (this.userType == 1) {
+        const formData = new FormData();
+        formData.append('fileImg', this.selectedFile); // 选中的文件
+        formData.append('folderPath', 'images/photoPage-img/'); // 实际的文件夹路径
+        // 这样发送才是正确的
+        formData.append('photo', new Blob([JSON.stringify({
+          alt: this.photoDescription, // 图片描述
+          // 其他需要的数据...
+        })], {type: 'application/json'})); // 图片描述
 
-      axios.post('http://localhost:8005/img/uploadImg', formData)
-          .then(response => {
-            if (response.data === 'success') {
-              ElMessage.success('图片上传成功！');
-              this.fetchPhotos(); // 上传成功后获取最新的图片列表
-            }
-          })
-          .catch(error => {
-            console.error('上传失败:', error);
-            ElMessage.error('图片上传失败！');
-          });
+        // 发送POST请求到后端的/uploadPhoto端点
+        axios.post('http://localhost:8005/photos/uploadPhoto', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+            .then(response => {
+              if (response.data === 'success') {
+                this.$message.success('图片上传成功！');
+                this.fetchPhotos(); // 上传成功后获取最新的图片列表
+              }
+            })
+            .catch(error => {
+              console.error('上传失败:', error);
+              this.$message.error('图片上传失败！');
+            });
+      } else {
+        ElMessage.error('权限不足，无法上传图片');
+      }
     },
     fetchPhotos() {
       axios.get('http://localhost:8005/photos/getAllPhotos')
@@ -89,18 +118,24 @@ export default {
       });
     },
     deletePhoto(photoId) {
-      // 这里添加删除图片的逻辑
-      axios.post(`http://localhost:8005/photos/delete/${photoId}`)
-          .then(response => {
-            if (response.data === 'success') {
-              ElMessage.success('图片删除成功！');
-              this.fetchPhotos(); // 删除成功后重新获取图片列表
-            }
-          })
-          .catch(error => {
-            console.error('删除失败:', error);
-            ElMessage.error('图片删除失败！');
-          });
+      if (this.userType == 1) {
+        // 使用axios发送DELETE请求到后端接口
+        axios.delete(`http://localhost:8005/photos/deletePhoto/${photoId}`)
+            .then(response => {
+              if (response.data === 'success') {
+                this.$message.success('图片删除成功！');
+                this.fetchPhotos(); // 删除成功后重新获取图片列表
+              } else {
+                this.$message.error('图片删除失败！');
+              }
+            })
+            .catch(error => {
+              console.error('删除失败:', error);
+              this.$message.error('图片删除失败！');
+            });
+      } else {
+        ElMessage.error('权限不足，无法删除图片');
+      }
     },
     async fetchPhotoFromMinio(photoPath) {
       try {

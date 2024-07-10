@@ -16,7 +16,8 @@
       </transition>
     </section>
     <!--  绑定事件处理器  -->
-    <blog-modal @blogDeleted="handleBlogDeleted" v-if="selectedBlog" :blog="selectedBlog" @close="selectedBlog = null"></blog-modal>
+    <blog-modal @blogDeleted="handleBlogDeleted" v-if="selectedBlog" :blog="selectedBlog"
+                @close="selectedBlog = null"></blog-modal>
   </div>
 </template>
 

@@ -23,8 +23,17 @@
 <script setup>
 import {useRouter} from 'vue-router';
 import axios from "axios";
+import {computed} from "vue";
+import {useStore} from "vuex";
+import {ElMessage} from "element-plus";
 
 const router = useRouter();
+
+// 状态管理
+const store = useStore();
+
+// 从 Vuex 获取用户类型
+const userType = computed(() => store.state.user_type);
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -40,25 +49,34 @@ const closeModal = () => {
 
 const editBlog = () => {
   // 使用router.push方法导航到博文的修改页面
-  router.push({name: 'EditSingleBlog', params: {id: props.blog.id}});
-  console.log('修改博客', props.blog.id);
+  console.log(userType.value)
+  if (userType.value == 1) {
+    router.push({name: 'EditSingleBlog', params: {id: props.blog.id}});
+    console.log('修改博客', props.blog.id);
+  } else {
+    ElMessage.error('权限不足，无法修改博客');
+  }
 };
 
 const deleteBlog = async () => {
-  try {
-    // 发送DELETE请求到后端
-    const response = await axios.delete(`http://localhost:8005/blogs/delete/${props.blog.id}`);
-    // 请求成功后的操作
-    alert('删除成功'); // 显示一个简单的成功通知
-    console.log(response.data); // 打印成功消息
-    closeModal(); // 关闭模态框
-    emit('blogDeleted', props.blog.id); // 通知父组件博客已被删除
-    // 可能还需要更新视图或通知用户
+  if (userType.value == 1) {
+    try {
+      // 发送DELETE请求到后端
+      const response = await axios.delete(`http://localhost:8005/blogs/delete/${props.blog.id}`);
+      // 请求成功后的操作
+      alert('删除成功'); // 显示一个简单的成功通知
+      console.log(response.data); // 打印成功消息
+      closeModal(); // 关闭模态框
+      emit('blogDeleted', props.blog.id); // 通知父组件博客已被删除
+      // 可能还需要更新视图或通知用户
 
-  } catch (error) {
-    // 错误处理
-    console.error('删除博客失败:', error);
-    alert('删除失败'); // 显示一个简单的错误通知
+    } catch (error) {
+      // 错误处理
+      console.error('删除博客失败:', error);
+      alert('删除失败'); // 显示一个简单的错误通知
+    }
+  } else {
+    ElMessage.error('权限不足，无法删除博客');
   }
 };
 </script>

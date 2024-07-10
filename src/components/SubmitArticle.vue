@@ -27,6 +27,9 @@
 
 <script>
 import axios from 'axios';
+import {useStore} from "vuex";
+import {computed} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   props: ['text'],
@@ -43,33 +46,44 @@ export default {
       fileName: '', // 用于存储文件名的数据属性
     };
   },
-  methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-      const file = event.target.files[0];
-      this.fileName = file ? file.name : ''; // 更新文件名
-    },
-    submitBlog() {
-      const formData = new FormData();
-      const textBlob = new Blob([this.text], {type: 'text/markdown'});
-      formData.append('file', textBlob, 'blog.md');
-      formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
-      // formData.append('file', this.file);
+  setup() {
+    // 状态管理
+    const store = useStore();
 
-      axios.post('http://localhost:8005/blogs/insertBlog', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-          .then(response => {
-            // 处理响应
-            console.log(response.data);
-            this.$emit('close');
-          })
-          .catch(error => {
-            // 处理错误
-            console.error(error);
-          });
+    // 从 Vuex 获取用户类型
+    const userType = computed(() => store.state.user_type);
+
+    return {
+      userType
+    }
+  },
+  methods: {
+    submitBlog() {
+      if (this.userType == 1) {
+        const formData = new FormData();
+        const textBlob = new Blob([this.text], {type: 'text/markdown'});
+        formData.append('file', textBlob, 'blog.md');
+        formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
+        // formData.append('file', this.file);
+
+        axios.post('http://localhost:8005/blogs/insertBlog', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+            .then(response => {
+              // 处理响应
+              console.log(response.data);
+              this.$emit('close');
+              ElMessage.success('提交成功');
+            })
+            .catch(error => {
+              // 处理错误
+              console.error(error);
+            });
+      } else {
+        ElMessage.error('权限不足，无法提交博客');
+      }
     },
     closeModal() {
       this.$emit('close');

@@ -1,6 +1,6 @@
 <!--登录界面-->
 <template>
-  <div class="login-body">
+  <div v-if="!isLoggedIn" class="login-body">
     <div class="login-panel">
       <div class="login-title">用户登录</div>
       <el-form :model="formData" ref="loginForm">
@@ -31,18 +31,26 @@
         <el-form-item label="">
           <el-button type="primary" style="width:100%" @click="onLogin">登录</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="text" @click="onRegister">没有账号？注册一个！</el-button>
+        </el-form-item>
       </el-form>
     </div>
   </div>
+  <UserPage></UserPage>
 </template>
 
 <!--这个不加setup，上面的找不到formData-->
 <script setup>
-import {reactive, ref} from "vue"
+import {computed, reactive, ref} from "vue"
+import {useStore} from 'vuex';
 import Vcode from "vue3-puzzle-vcode";
 import axios from 'axios'; // 引入axios
-import {useStore} from 'vuex';
+import router from '@/router'
+import UserPage from "@/components/UserPage.vue";
+import {ElMessage} from 'element-plus';
 
+// 用户资料
 const formData = reactive({
   account: '',
   password: '',
@@ -51,33 +59,40 @@ const formData = reactive({
 
 const isShow = ref(false);
 const isVerified = ref(false); // 验证码验证状态
-
 const loginForm = ref(null);
+const isLoggedIn = computed(() => store.state.isLoggedIn);
+// 状态管理
+const store = useStore();
+
+// 调整注册操作页面
+const onRegister = () => {
+// 重定向到注册页面
+  router.push({name: "register"});
+};
 
 const onShow = () => {
   isShow.value = true;
 };
 
+// 关闭验证码
 const onClose = () => {
   isShow.value = false;
 };
 
+// 验证码状态
 const onSuccess = () => {
   isVerified.value = true; // 设置验证码验证状态为成功
   onClose(); // 验证成功，需要手动关闭模态框
 };
 
-const store = useStore();
-
 const onLogin = async () => {
   loginForm.value.validate(async (valid) => {
     if (valid && isVerified.value) {
-// 构建登录请求的数据
+      // 构建登录请求的数据
       const loginData = {
-        username: formData.account,
+        uemail: formData.account,
         password: formData.password,
       };
-
       try {
         // 发送登录请求到后端
         const response = await axios({
@@ -88,19 +103,38 @@ const onLogin = async () => {
         });
         // 检查后端返回的是否成功标识
         if (response.data.success) {
-          // 登录成功，存储用户邮箱
-          localStorage.setItem('uemail', response.data.uemail);
+          // 登录成功，获取用户资料
+          // 调用 /findByEmail 接口获取用户资料
+          const userResponse = await axios.post('http://localhost:8004/user/findByEmail', {
+            uemail: formData.account
+          });
+          // 如果用户选择了“记住我”，则将登录状态保存到 localStorage
+          if (formData.rememberMe) {
+            localStorage.setItem('isLoggedIn', true);
+            localStorage.setItem('uemail', response.data.uemail);
+            localStorage.setItem('utype', userResponse.data.utype);
+          } else {
+            sessionStorage.setItem('isLoggedIn', true);
+            sessionStorage.setItem('uemail', response.data.uemail);
+            localStorage.setItem('utype', userResponse.data.utype);
+          }
+          // 更新 Vuex 状态
+          store.commit('setLoggedIn', true);
           store.commit('setUserEmail', response.data.uemail);
-          store.commit('setLoggedIn', response.data.success);
-          console.log('uemail:', store.state.uemail);
-          console.log('isLoggedIn:', store.state.isLoggedIn);
-          // console.log(response.data.uemail)
-          // 更新前端的登录状态
-          // this.isLoggedIn = true; // 你可能需要在Vue实例中定义这个变量
-          // 登录成功后的操作，比如页面跳转
+          // 存储用户类型到 Vuex
+          store.commit('setUserType', userResponse.data.utype);
+
           console.log('登录成功', response);
+          ElMessage({
+            message: '登录成功！欢迎回来。',
+            type: 'success',
+            duration: 3000 // 消息显示时间，单位毫秒
+          });
+          // 刷新
+          // location.reload();
+          // 登录成功后的操作，比如页面跳转
           // 重定向到主页或其他页面
-          // this.$router.push('/home');
+          await router.push({name: 'home'});
         } else {
           // 登录失败处理
           alert('登录失败，请检查账号密码是否正确');
@@ -117,16 +151,29 @@ const onLogin = async () => {
         }
       }
     } else {
-// 验证失败处理
+      // 验证失败处理
       if (!isVerified.value) {
         alert('请先完成验证码验证');
       }
     }
   });
 };
+
+// 在 Vue 实例创建时检查存储的登录状态
+const checkLoginStatus = () => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+  const uemail = localStorage.getItem('uemail') || sessionStorage.getItem('uemail');
+  if (isLoggedIn) {
+    store.commit('setLoggedIn', true);
+    store.commit('setUserEmail', uemail);
+  }
+};
+
+// 调用 checkLoginStatus 函数来初始化登录状态
+checkLoginStatus();
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-body {
   display: flex;
   align-items: center;

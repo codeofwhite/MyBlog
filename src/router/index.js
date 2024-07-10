@@ -7,16 +7,29 @@ import Write from "@/views/Blog/WriteArticle.vue";
 import PhotoManager from "@/views/PhotoManager.vue";
 import UserManager from "@/views/UserManager.vue";
 import EditSingleBlog from "@/components/EditSingleBlog.vue";
+import RegisterPage from "@/views/RegisterPage.vue";
 
 const routes = [
-    {path: '/', component: HomePage},
+    {
+        path: '/',
+        name: 'home',
+        component: HomePage
+    },
     {path: '/login', component: LoginPage},
-    {path: '/edit', component: EditArticle},
+    {
+        path: '/edit',
+        name: 'EditArticle',
+        component: EditArticle},
     {path: '/analysis', component: ArticleAnalysis},
     {path: '/write', component: Write},
     {path: '/photo', component: PhotoManager},
     {path: '/usermanager', component: UserManager},
     {path: '/eidtSingle/:id', name: 'EditSingleBlog', component: EditSingleBlog},
+    {
+        path:'/register',
+        name:'register',
+        component: RegisterPage
+    },
 ]
 
 const router = createRouter({

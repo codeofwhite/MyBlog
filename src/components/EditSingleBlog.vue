@@ -1,23 +1,28 @@
 <template>
   <div class="editor-container">
+    <!-- 新增的返回按钮 -->
+    <div class="back-button-container">
+      <button class="back-button" @click="goBack">返回</button>
+    </div>
     <MdEditor v-model="text"/>
     <!-- 将按钮放置在编辑器下方，并使其宽度与编辑器一致 -->
     <button class="submit-button" @click="showModal = true">更新博客</button>
   </div>
-  <SubmitArticle v-if="showModal" :text="text" @close="showModal = false"/>
+  <UpdateArticleModal v-if="showModal" :text="text" :blogId="blogId" @close="showModal = false"/>
 </template>
 
 <script setup>
 import {onMounted, ref} from 'vue';
 import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
-import SubmitArticle from "@/components/SubmitArticle.vue";
 import {Minio} from 'minio-js';
-import {useRoute} from 'vue-router';
-import axios from "axios";
+import {useRoute, useRouter} from 'vue-router';
+import UpdateArticleModal from "@/components/UpdateArticleModal.vue";
 
 // 使用useRoute来获取当前路由实例
 const route = useRoute();
+// 使用useRouter来获取router实例以编程方式导航
+const router = useRouter();
 
 const text = ref('');
 const showModal = ref(false);
@@ -35,6 +40,11 @@ const minioClient = new Minio.Client({
   accessKey: 'gAjYSAJDImJP9ZvqgJB6', // MinIO的accessKey
   secretKey: 'cb8SkANxDCm90kdLz2puij4U7J8ZmlTBWAHYInT3' // MinIO的secretKey
 });
+
+// 新增的返回编辑文章页面的方法
+const goBack = () => {
+  router.push({name: 'EditArticle', params: {id: blogId.value}});
+};
 
 // 得到博客的md文件
 const fetchBlogDetail = async () => {
@@ -59,17 +69,19 @@ const fetchBlogDetail = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   // 假设这里是获取路由参数并赋值给blogId和title的逻辑
   blogId.value = route.params.id;
   // console.log(blogId.value);
-  fetchBlogDetail();
+  // 变成异步的就可以避免一些缓存的问题，就是更新后minio数据的问题
+  await fetchBlogDetail();
 });
 </script>
 
 <style scoped>
 .editor-container {
-  padding: 20px;
+  position: relative; /* 相对定位 */
+  padding-top: 80px; /* 增加顶部的内边距 */
   background: #f5f5f5;
   border-radius: 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -144,5 +156,31 @@ onMounted(() => {
 
 .submit-button:hover {
   background-color: #367BEC; /* 鼠标悬停时的背景颜色 */
+}
+
+/* 新增返回按钮容器的样式 */
+.back-button-container {
+  position: absolute; /* 绝对定位 */
+  top: 20px; /* 距离顶部20px */
+  left: 20px; /* 距离左侧20px */
+}
+
+/* 新增返回按钮的样式 */
+.back-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #67C23A; /* 按钮背景颜色 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  width: 100%; /* 使按钮宽度填满容器 */
+  max-width: 200px; /* 最大宽度限制 */
+}
+
+.back-button:hover {
+  background-color: #5DAE28; /* 鼠标悬停时的背景颜色 */
 }
 </style>
