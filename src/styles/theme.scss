@@ -15,23 +15,23 @@
 @mixin lightTheme() {
   @include meta.load-css('highlight.js/styles/github');
   @include css-var(
-    $theme-body: #ebebeb,
-    $theme-header: #f8f8f8,
-    $theme-banner: #ffffff,
-    $theme-border: #d4d4d4,
-    $theme-text: #24292f,
-    $theme-link: #1a1e22
+          $theme-body: #ebebeb,
+          $theme-header: #f8f8f8,
+          $theme-banner: #ffffff,
+          $theme-border: #d4d4d4,
+          $theme-text: #24292f,
+          $theme-link: #1a1e22
   );
 }
 
 @mixin darkTheme() {
   @include meta.load-css('highlight.js/styles/github-dark-dimmed');
   @include css-var(
-    $theme-body: #0d1117,
-    $theme-header: #2d333b,
-    $theme-banner: #22272e,
-    $theme-border: #0d1117,
-    $theme-text: #adbac7,
-    $theme-link: #ffffff
+          $theme-body: #0d1117,
+          $theme-header: #2d333b,
+          $theme-banner: #22272e,
+          $theme-border: #0d1117,
+          $theme-text: #adbac7,
+          $theme-link: #ffffff
   );
 }

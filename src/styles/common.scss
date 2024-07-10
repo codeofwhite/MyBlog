@@ -11,9 +11,11 @@
   &[theme='light'] {
     @include lightTheme();
   }
+
   &[theme='dark'] {
     @include darkTheme();
   }
+
   &[theme='system'] {
     @media (prefers-color-scheme: light) {
       @include lightTheme();
@@ -41,11 +43,10 @@ button {
 
 pre,
 code {
-  font-family:
-    Consolas,
-    Liberation Mono,
-    Menlo,
-    monospace;
+  font-family: Consolas,
+  Liberation Mono,
+  Menlo,
+  monospace;
 }
 
 * {
@@ -76,6 +77,7 @@ a {
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: $text-disabled;
+
   &:hover {
     background-color: $text-color;
   }
@@ -86,10 +88,12 @@ a {
 .module-leave-active {
   transition: opacity $transition-time ease;
 }
+
 .module-slow-enter-active,
 .module-slow-leave-active {
   transition: opacity $transition-time * 2 ease;
 }
+
 .module-enter-from,
 .module-leave-to,
 .module-slow-enter-from,

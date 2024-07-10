@@ -21,6 +21,19 @@
     <h2>评论</h2>
     <div v-for="comment in comments" :key="comment.id" class="comment">
       <p><strong>{{ comment.userEmail }}：</strong>{{ comment.comment }}</p>
+      <!-- 添加回复按钮 -->
+      <button @click="showReplyInput(comment.id)">回复</button>
+      <!-- 回复输入框，使用v-if控制显示状态 -->
+      <div v-if="comment.showReply" class="add-reply">
+        <input v-model="comment.newReply" placeholder="写回复..."/>
+        <button @click="addNewReply(comment.id, comment.newReply, userEmail)">提交回复</button>
+      </div>
+      <!-- 显示回复列表 -->
+      <div class="replies">
+        <div v-for="reply in comment.replies" :key="reply.id" class="reply">
+          <p><strong>{{ reply.userEmail }}：</strong>{{ reply.reply }}</p>
+        </div>
+      </div>
     </div>
     <div class="add-comment">
       <input v-model="newComment" placeholder="添加评论..."/>
@@ -61,7 +74,10 @@ export default {
       comments: [
         {
           userEmail: '',
-          comment: ''
+          comment: '',
+          replies: [], // 为每个评论添加一个回复数组
+          newReply: '', // 绑定新回复的数据
+          showReply: false, // 控制回复输入框的显示状态
         }
       ], // 评论数组
       newComment: '', // 新评论的绑定数据
@@ -71,6 +87,37 @@ export default {
     }
   },
   methods: {
+    // 在Vue组件的methods中添加一个新方法
+    async addNewReply(commentId, newReplyContent, userEmail) {
+      // 构建要发送的回复对象
+      const reply = {
+        reply: newReplyContent,
+        userEmail: userEmail
+      };
+      try {
+        // 使用axios发送POST请求
+        const response = await axios.post(`http://localhost:8005/comments/${commentId}/replies`, JSON.stringify(reply), {
+          params: {userEmail: userEmail},
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        // 检查响应状态
+        if (response.status === 200) {
+          console.log('回复成功添加');
+          // 这里可以添加更多的逻辑，比如更新视图等
+          await this.fetchComments();
+        } else {
+          console.error('回复添加失败', response);
+        }
+      } catch (error) {
+        console.error('回复添加过程中出现错误', error);
+      }
+    },
+    showReplyInput(commentId) {
+      const comment = this.comments.find(c => c.id === commentId);
+      comment.showReply = !comment.showReply; // 切换回复输入框的显示状态
+    },
     // 初始化minio客户端
     initMinioClient() {
       this.minioClient = new Minio.Client({
@@ -417,5 +464,44 @@ button:hover {
 
 .danmu-input-section button:hover {
   background-color: var(--button-hover-color);
+}
+
+.add-reply {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.add-reply input {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-reply button {
+  padding: 10px 20px;
+  background-color: var(--theme-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-reply button:hover {
+  background-color: #1bffc4;
+}
+
+.replies {
+  margin-left: 20px;
+}
+
+.reply {
+  background-color: #f0f0f0;
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 </style>

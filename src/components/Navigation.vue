@@ -17,9 +17,9 @@
       <li class="normal" :class="{ active: activeRoute === '/photopage' }">
         <router-link to="/photopage">PhotoPage😗</router-link>
       </li>
-      <li class="normal" :class="{ active: activeRoute === '/test' }">
-        <router-link to="/test">Test</router-link>
-      </li>
+      <!--      <li class="normal" :class="{ active: activeRoute === '/test' }">-->
+      <!--        <router-link to="/test">Test</router-link>-->
+      <!--      </li>-->
       <!--      <li v-if="!isLoggedIn" :class="{ active: activeRoute === '/login' }"><router-link to="/login">Login</router-link></li>-->
       <!-- 用户登录状态 -->
       <li v-show="!isLoggedIn" class="user-status">
@@ -59,7 +59,7 @@ export default {
       // 获取用户名称的首字母
       // 确保 user_email 已定义且不为空
       const email = this.$store.state.uemail;
-      return email ? email.charAt(0).toUpperCase() : '?';
+      return email ? email.charAt(0).toUpperCase() : '登录';
     }
   },
 };
