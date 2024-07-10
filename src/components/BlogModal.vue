@@ -174,7 +174,7 @@ const deleteBlog = async () => {
   background-color: #c82333;
 }
 
-.comment-button{
+.comment-button {
   background-color: #09b46a;
   color: #fff;
 }

@@ -20,20 +20,21 @@ const routes = [
     {
         path: '/edit',
         name: 'EditArticle',
-        component: EditArticle},
+        component: EditArticle
+    },
     {path: '/analysis', component: ArticleAnalysis},
     {path: '/write', component: Write},
     {path: '/photo', component: PhotoManager},
     {path: '/usermanager', component: UserManager},
     {path: '/eidtSingle/:id', name: 'EditSingleBlog', component: EditSingleBlog},
     {
-        path:'/register',
-        name:'register',
+        path: '/register',
+        name: 'register',
         component: RegisterPage
     },
     {
-        path:'/commentManager/:id',
-        name:'CommentManager',
+        path: '/commentManager/:id',
+        name: 'CommentManager',
         component: CommentManager
     },
 ]

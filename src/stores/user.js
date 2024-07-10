@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import {createStore} from 'vuex';
 import createPersistedState from 'vuex-persistedstate'; // 持久化
 
 export default createStore({
@@ -14,7 +14,7 @@ export default createStore({
         setLoggedIn(state, status) {
             state.isLoggedIn = status;
         },
-        setUserType(state, utype){
+        setUserType(state, utype) {
             state.user_type = utype;
             console.log(state.user_type)
         }

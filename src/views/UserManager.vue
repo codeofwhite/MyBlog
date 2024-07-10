@@ -85,7 +85,7 @@ const openEditModal = (user) => {
   if (userType.value == 1) {
     selectedUser.value = user;
     showEditModal.value = true;
-  }else{
+  } else {
     ElMessage.error('权限不足，无法修改用户信息');
   }
 };
@@ -107,7 +107,7 @@ const viewUser = (userId) => {
       userDetails.value = user;
       showModal.value = true;
     }
-  }else{
+  } else {
     ElMessage.error('权限不足，无法查看用户详细信息');
   }
 };

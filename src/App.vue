@@ -35,7 +35,7 @@ export default {
   created() {
     document.body.removeChild(document.getElementById('Loading')) // 加载页面完后移除加载动画
   },
-  computed:{
+  computed: {
     userInitial() {
       // 获取用户名称的首字母
       // 确保 user_email 已定义且不为空

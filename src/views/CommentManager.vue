@@ -34,7 +34,7 @@ export default {
     async fetchComments() {
       try {
         const response = await axios.get(`http://localhost:8005/comments/getAllComments`, {
-          params: { blogId: this.$route.params.id }
+          params: {blogId: this.$route.params.id}
         });
         this.comments = response.data;
       } catch (error) {
@@ -42,7 +42,14 @@ export default {
       }
     },
     formatDate(dateString) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      };
       return new Date(dateString).toLocaleDateString('zh-CN', options);
     }
   },
