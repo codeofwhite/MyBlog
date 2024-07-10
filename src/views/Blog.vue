@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next';
+import {LazyImg, Waterfall} from 'vue-waterfall-plugin-next';
 import 'vue-waterfall-plugin-next/dist/style.css';
 import axios from "axios";
 import {Minio} from "minio-js";
@@ -32,7 +32,7 @@ export default {
   created() {
     this.fetchBlogList();
   },
-  components: { LazyImg, Waterfall },
+  components: {LazyImg, Waterfall},
   data() {
     return {
       list: [],
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     goToBlogDetail(item) {
-      this.$router.push({ name: 'BlogDetail', params: { id: item.id, title: item.title } });
+      this.$router.push({name: 'BlogDetail', params: {id: item.id, title: item.title}});
     },
     toggleCategory(category) {
       const index = this.activeCategories.indexOf(category);

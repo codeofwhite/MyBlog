@@ -1,24 +1,24 @@
 <template>
-<div class="question-field">
-<h2>问题留言区</h2>
-<el-form @submit.prevent="handleSubmit" class="question-form">
-  <el-form-item label="您的问题">
-    <el-input type="textarea" v-model="newQuestion.content" placeholder="请在这里输入您的问题..."></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" native-type="submit">提交问题</el-button>
-  </el-form-item>
-</el-form>
-<div class="question-list">
-  <div class="question" v-for="question in questions" :key="question.id">
-    <div class="question-content"><strong>问题：</strong>{{ question.question }}</div>
-    <div class="question-userEmail"><strong>邮箱：</strong>{{ question.userEmail ? question.userEmail : '匿名' }}
+  <div class="question-field">
+    <h2>问题留言区</h2>
+    <el-form @submit.prevent="handleSubmit" class="question-form">
+      <el-form-item label="您的问题">
+        <el-input type="textarea" v-model="newQuestion.content" placeholder="请在这里输入您的问题..."></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" native-type="submit">提交问题</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="question-list">
+      <div class="question" v-for="question in questions" :key="question.id">
+        <div class="question-content"><strong>问题：</strong>{{ question.question }}</div>
+        <div class="question-userEmail"><strong>邮箱：</strong>{{ question.userEmail ? question.userEmail : '匿名' }}
+        </div>
+        <div class="question-date"><strong>日期：</strong>{{ formatDate(question.createDate) }}</div>
+      </div>
     </div>
-    <div class="question-date"><strong>日期：</strong>{{ formatDate(question.createDate) }}</div>
   </div>
-</div>
-</div>
-<GaveMe></GaveMe>
+  <GaveMe></GaveMe>
 </template>
 
 <script>

@@ -48,7 +48,7 @@ import Vcode from "vue3-puzzle-vcode";
 import axios from 'axios'; // 引入axios
 import router from '@/router'
 import UserPage from "@/components/UserPage.vue";
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
 // 用户资料
 const formData = reactive({
