@@ -39,7 +39,7 @@ export default {
         content: '', // 内容
         image: null // 存储图片的数据
       },
-      folderPath: 'images/gaveMeImg', // minio文件夹路径
+      folderPath: 'images/gaveMeImg/', // minio文件夹路径
       gaveMeList: [] // 用于存储从接口获取的gaveMe内容
     };
   },
@@ -69,7 +69,7 @@ export default {
         formData.append('gaveMe', new Blob([JSON.stringify({
           userEmail: this.userEmail, // 用户的email
           content: this.newMessage.content // 文字内容
-// 其他需要的数据...
+          // 其他需要的数据...
         })], {type: 'application/json'}));
         formData.append('fileImg', this.newMessage.image);
         formData.append('folderPath', this.folderPath);

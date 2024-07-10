@@ -48,6 +48,7 @@ import Vcode from "vue3-puzzle-vcode";
 import axios from 'axios'; // 引入axios
 import router from '@/router'
 import UserPage from "@/components/UserPage.vue";
+import { ElMessage } from 'element-plus';
 
 // 用户资料
 const formData = reactive({
@@ -116,12 +117,16 @@ const onLogin = async () => {
           store.commit('setLoggedIn', true);
           store.commit('setUserEmail', response.data.uemail);
           console.log('登录成功', response);
+          ElMessage({
+            message: '登录成功！欢迎回来。',
+            type: 'success',
+            duration: 3000 // 消息显示时间，单位毫秒
+          });
           // 刷新
           // location.reload();
-          
           // 登录成功后的操作，比如页面跳转
           // 重定向到主页或其他页面
-          // this.$router.push('/home');
+          await router.push({name: 'home'});
         } else {
           // 登录失败处理
           alert('登录失败，请检查账号密码是否正确');
