@@ -11,6 +11,7 @@
     <LikeSection></LikeSection>
     <!-- 弹幕输入区域 -->
     <div class="danmu-input-section">
+      <!-- 切换按钮 -->
       <button class="danmuButton" @click="toggleDanmu">切换弹幕</button>
       <input v-model="newDanmu" placeholder="写弹幕..."/>
       <button @click="insertDanmu">发送弹幕</button>
@@ -420,6 +421,15 @@ button:hover {
   background-color: #1bffc4;
 }
 
+/* 弹幕容器样式 */
+.danmu-container {
+  position: fixed;
+  right: 0; /* 将弹幕组件定位到侧边 */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000; /* 确保弹幕组件在其他内容之上 */
+}
+
 /*弹幕*/
 .danmu {
   position: fixed;
@@ -440,7 +450,7 @@ button:hover {
 /* 弹幕输入区域样式 */
 .danmu-input-section {
   position: fixed;
-  bottom: 100px; /* 调整为合适的位置 */
+  bottom: 0px; /* 调整为合适的位置 */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -464,6 +474,7 @@ button:hover {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-bottom: 10px; /* 与弹幕组件保持一定距离 */
 }
 
 .danmu-input-section button:hover {
