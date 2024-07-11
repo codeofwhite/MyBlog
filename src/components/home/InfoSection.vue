@@ -5,7 +5,7 @@
       <div class="info-section">
         <h2>网站资讯</h2>
         <p>这里是网站的最新资讯，包括更新、活动等。</p>
-        <img src="@/assets/images/photoPage-img/codeofwhite.jpg">
+        <img src="../../assets/images/photoPage-img/codeofwhite.jpg">
       </div>
     </div>
     <!-- 新增交流群显示 -->

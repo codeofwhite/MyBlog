@@ -46,7 +46,7 @@ import {computed, reactive, ref} from "vue"
 import {useStore} from 'vuex';
 import Vcode from "vue3-puzzle-vcode";
 import axios from 'axios'; // 引入axios
-import router from '@/router'
+import router from '@/router/index.js'
 import UserPage from "@/components/UserPage.vue";
 import {ElMessage} from 'element-plus';
 
@@ -98,7 +98,7 @@ const onLogin = async () => {
         // 发送登录请求到后端
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:8004/login',
+          url: 'http://localhost:9527/user/login',
           data: loginData,
           headers: {'Content-Type': 'application/json'}
         });

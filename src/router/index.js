@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import blogRoutes from './blogRoutes';
-import RegisterPage from "@/views/RegisterPage.vue";
+import RegisterPage from "@/views/user/RegisterPage.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,12 +17,12 @@ const router = createRouter({
             // route level code-splitting
             // this generates a separate chunk (About.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
-            component: () => import('../views/Login.vue')
+            component: () => import('../views/user/Login.vue')
         },
         {
             path: '/blog',
             name: 'blog',
-            component: () => import('../views/Blog.vue'),
+            component: () => import('@/views/blog/Blog.vue'),
             props: true,
         },
         {
@@ -43,7 +43,7 @@ const router = createRouter({
         {
             path: '/test',
             name: 'test',
-            component: () => import('../views/Test/Test.vue')
+            component: () => import('@/views/test/Test.vue')
         },
         {
             path: '/register',

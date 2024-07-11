@@ -50,7 +50,7 @@
 import {onMounted, onUnmounted, ref} from 'vue';
 import {RouterView} from 'vue-router';
 import Navigation from "@/components/Navigation.vue";
-import AudioPlay from "@/components/AudioPlay.vue";
+import AudioPlay from "@/components/home/AudioPlay.vue";
 import router from "@/router/index.js"; // 路由跳转
 import {L2Dwidget} from 'live2d-widget'
 

@@ -63,7 +63,7 @@ export default {
     },
     async fetchBlogList() {
       try {
-        const response = await axios.get('http://localhost:8005/blogs/getAllBlogs');
+        const response = await axios.get('http://localhost:9527/blogs/getAllBlogs');
         if (response.status === 200) {
           this.list = response.data;
           // 直接嵌在一起，这样调用就可以避免一些问题

@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     fetchQuestions() {
-      axios.get('http://localhost:8005/questions/getAllQuestions')
+      axios.get('http://localhost:9527/questions/getAllQuestions')
           .then(response => {
             this.questions = response.data;
           })
@@ -61,7 +61,8 @@ export default {
     handleSubmit() {
       if (this.newQuestion.content.trim()) {
         this.isLoading = true;
-        axios.post('http://localhost:8005/questions/insertQuestion',
+        // 这边会报错，跨域不知道为什么
+        axios.post('http://localhost:9527/questions/insertQuestion',
             JSON.stringify({
               question: this.newQuestion.content,
               userEmail: this.userEmail

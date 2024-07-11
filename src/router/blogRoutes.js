@@ -1,4 +1,4 @@
-import BlogDetail from "@/views/BlogDetail.vue";
+import BlogDetail from "@/views/blog/BlogDetail.vue";
 
 export default [
     {
@@ -6,7 +6,7 @@ export default [
         path: '/blog/:id&:title',
         name: 'BlogDetail',
         // 动态路由
-        component: () => import('../views/BlogDetail.vue'),
+        component: () => import('@/views/blog/BlogDetail.vue'),
         props: true,
     },
 // ...其他博客相关路由...

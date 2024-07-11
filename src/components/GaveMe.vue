@@ -74,7 +74,7 @@ export default {
         formData.append('fileImg', this.newMessage.image);
         formData.append('folderPath', this.folderPath);
 
-        const response = await axios.post('http://localhost:8005/gaveme/insertGaveMe', formData, {
+        const response = await axios.post('http://localhost:9527/gaveme/insertGaveMe', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -100,7 +100,7 @@ export default {
     },
     async fetchAllGaveMe() {
       try {
-        const response = await axios.get('http://localhost:8005/gaveme/getAllGaveMe');
+        const response = await axios.get('http://localhost:9527/gaveme/getAllGaveMe');
         if (response.status === 200) {
           this.gaveMeList = response.data; // 将获取到的gaveMe内容赋值给gaveMeList
           // 为每个照片对象添加URL

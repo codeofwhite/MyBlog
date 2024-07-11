@@ -53,9 +53,9 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue';
 import ScrollReveal from 'scrollreveal'
-import SwiperComponents from "@/components/SwiperComponents.vue";
-import InfoSection from "@/components/InfoSection.vue";
-import TimeLine from "@/components/TimeLine.vue";
+import SwiperComponents from "@/components/home/SwiperComponents.vue";
+import InfoSection from "@/components/home/InfoSection.vue";
+import TimeLine from "@/components/home/TimeLine.vue";
 
 const typedStrings = ['亲爱的朋友你好呀', '我叫张和俊', '来自重庆大学', '欢迎光临我的博客'];
 

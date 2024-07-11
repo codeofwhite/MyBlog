@@ -4,13 +4,13 @@
     <h2>我的时间轴</h2>
     <!-- 时间轴的左上角动画 -->
     <div class="corner-animation top-left-animation">
-      <img src="../assets/gifs/jujuyeah.gif" class="floating">
-      <img src="../assets/gifs/jujunomoney.gif">
+      <img src="../../assets/gifs/jujuyeah.gif" class="floating">
+      <img src="../../assets/gifs/jujunomoney.gif">
     </div>
     <!-- 时间轴的右上角动画 -->
     <div class="corner-animation top-right-animation">
-      <img src="../assets/gifs/jujuhead.gif">
-      <img src="../assets/gifs/jujujumping.gif" class="spinning">
+      <img src="../../assets/gifs/jujuhead.gif">
+      <img src="../../assets/gifs/jujujumping.gif" class="spinning">
     </div>
     <div class="timeline-item" v-for="(item, index) in timelineItems" :key="index">
       <img :src="item.image" :alt="item.description">
@@ -18,11 +18,11 @@
     </div>
     <!-- 时间轴的左下角动画 -->
     <div class="corner-animation bottom-left-animation">
-      <img src="../assets/gifs/jujufigting.gif">
+      <img src="../../assets/gifs/jujufigting.gif">
     </div>
     <!-- 时间轴的右下角动画 -->
     <div class="corner-animation bottom-right-animation">
-      <img src="../assets/gifs/jujudance.gif">
+      <img src="../../assets/gifs/jujudance.gif">
     </div>
   </div>
 </template>

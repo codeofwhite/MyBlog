@@ -89,6 +89,10 @@ export default {
   methods: {
     // 在Vue组件的methods中添加一个新方法
     async addNewReply(commentId, newReplyContent, userEmail) {
+      if (!this.userEmail) {
+        alert('请先登录再回复评论！');
+        return; // 如果用户未登录，显示提示并退出函数
+      }
       // 构建要发送的回复对象
       const reply = {
         reply: newReplyContent,
@@ -96,7 +100,7 @@ export default {
       };
       try {
         // 使用axios发送POST请求
-        const response = await axios.post(`http://localhost:8005/comments/${commentId}/replies`, JSON.stringify(reply), {
+        const response = await axios.post(`http://localhost:9527/comments/${commentId}/replies`, JSON.stringify(reply), {
           params: {userEmail: userEmail},
           headers: {
             "Content-Type": "application/json"
@@ -166,7 +170,7 @@ export default {
 
       if (this.newDanmu.trim()) {
         try {
-          const response = await axios.post('http://localhost:8004/danmu/insertDanmu', {
+          const response = await axios.post('http://localhost:9527/danmu/insertDanmu', {
             danmu: this.newDanmu,
             uemail: this.userEmail, // 假设 userEmail 是用户邮箱
             blogId: this.blogId // 假设 blogId 是博客ID
@@ -183,7 +187,7 @@ export default {
     // 得到后端对应博客的弹幕数据
     async fetchDanmus() {
       try {
-        const response = await axios.post('http://localhost:8004/danmu/selectDanmu', {
+        const response = await axios.post('http://localhost:9527/danmu/selectDanmu', {
           blogId: this.blogId // 假设 blogId 是博客ID
         });
         this.danmus = response.data; // 设置弹幕数组
@@ -200,7 +204,7 @@ export default {
       }
       if (this.newComment.trim()) {
         try {
-          const response = await axios.post('http://localhost:8005/comments/insertComment', JSON.stringify({
+          const response = await axios.post('http://localhost:9527/comments/insertComment', JSON.stringify({
             userEmail: this.userEmail, // 用户的邮箱
             comment: this.newComment, // 评论内容
             blogId: this.blogId // 博客ID
@@ -221,7 +225,7 @@ export default {
     // 得到评论
     async fetchComments() {
       try {
-        const response = await axios.get('http://localhost:8005/comments/getAllComments', {
+        const response = await axios.get('http://localhost:9527/comments/getAllComments', {
           params: {blogId: this.blogId}
         });
         this.comments = response.data; // 设置评论数组

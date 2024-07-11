@@ -82,7 +82,7 @@ export default {
             // 发送登录请求到后端
             const response = await axios({
               method: 'post',
-              url: 'http://localhost:8004/register',
+              url: 'http://localhost:9527/user/register',
               data: registerData,
               headers: {'Content-Type': 'application/json'}
             });

@@ -40,9 +40,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
-@import '@/styles/mixins.scss';
-@import './style.scss';
+@import '@/styles/variables';
+@import '@/styles/mixins';
+@import '../../styles/style';
 
 .swiper {
   @include swiper-wrapper($height: 360px);

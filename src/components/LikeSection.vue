@@ -40,7 +40,7 @@ export default {
     // 检查用户的点赞状态
     async checkLikeStatus() {
       try {
-        const response = await axios.post('http://localhost:8005/blogs/checkLikeStatus', {
+        const response = await axios.post('http://localhost:9527/blogs/checkLikeStatus', {
           blogId: this.blogId,
           userId: this.userEmail
         });
@@ -52,7 +52,7 @@ export default {
     // 点赞功能
     async likeBlog() {
       try {
-        const response = await axios.post('http://localhost:8005/blogs/like', {
+        const response = await axios.post('http://localhost:9527/blogs/like', {
           blogId: this.blogId,
           userId: this.userEmail // 假设 userEmail 是用户ID
         });
@@ -67,7 +67,7 @@ export default {
     // 取消点赞功能
     async unlikeBlog() {
       try {
-        const response = await axios.post('http://localhost:8005/blogs/unlike', {
+        const response = await axios.post('http://localhost:9527/blogs/unlike', {
           blogId: this.blogId,
           userId: this.userEmail // 假设 userEmail 是用户ID
         });
@@ -82,7 +82,7 @@ export default {
     // 获取点赞数
     async getLikesCount() {
       try {
-        const response = await axios.post('http://localhost:8005/blogs/getLikesCount', {
+        const response = await axios.post('http://localhost:9527/blogs/getLikesCount', {
           blogId: this.blogId
         });
         this.likes = response.data;

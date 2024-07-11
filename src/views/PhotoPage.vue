@@ -79,7 +79,7 @@ export default {
     async fetchPhotoList() {
       try {
         // 使用Axios发送GET请求到后端API
-        const response = await axios.get('http://localhost:8005/photos/getAllPhotos');
+        const response = await axios.get('http://localhost:9527/photos/getAllPhotos');
         if (response.status === 200) {
           // 如果响应状态码为200，表示请求成功
           this.photos = response.data; // 将获取到的照片列表赋值给photos
