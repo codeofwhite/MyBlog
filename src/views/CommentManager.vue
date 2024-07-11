@@ -33,7 +33,7 @@ export default {
   methods: {
     async fetchComments() {
       try {
-        const response = await axios.get(`http://localhost:8005/comments/getAllComments`, {
+        const response = await axios.get(`http://localhost:9527/comments/getAllComments`, {
           params: {blogId: this.$route.params.id}
         });
         this.comments = response.data;

@@ -58,7 +58,7 @@ export default {
       formData.append('markDownFile', textBlob, 'blog.md');
       formData.append('blogs', new Blob([JSON.stringify(this.blog)], {type: 'application/json'}));
       this.submitUpload();
-      axios.post('http://localhost:8005/blogs/updateBlog', formData, {
+      axios.post('http://localhost:9527/blogs/updateBlog', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -87,7 +87,7 @@ export default {
       })], {type: 'application/json'})); // 图片描述
 
       // 发送POST请求到后端的/uploadPhoto端点
-      axios.post('http://localhost:8005/photos/uploadPhoto', formData, {
+      axios.post('http://localhost:9527/photos/uploadPhoto', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

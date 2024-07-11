@@ -13,8 +13,8 @@
 import {ref} from 'vue';
 import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
-import SubmitArticle from "@/components/SubmitArticle.vue";
-import UploadMarkDown from "@/components/UploadMarkDown.vue";
+import SubmitArticle from "@/components/blog/SubmitArticle.vue";
+import UploadMarkDown from "@/components/blog/UploadMarkDown.vue";
 
 const text = ref('# Hello Editor');
 const showModal = ref(false);

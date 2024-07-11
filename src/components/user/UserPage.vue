@@ -83,7 +83,7 @@ export default {
     // 获取用户资料的方法
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.post('http://localhost:8004/user/findByEmail', {
+        const response = await axios.post('http://localhost:9527/user/findByEmail', {
           uemail: userEmail.value
         });
         if (response.data) {
@@ -106,7 +106,7 @@ export default {
       };
       try {
         // 发送更新请求到后端
-        const response = await axios.post('http://localhost:8004/user/updateUserInformation', updateData);
+        const response = await axios.post('http://localhost:9527/user/updateUserInformation', updateData);
         if (response.data === 'success') {
           // 更新成功后的操作，例如提示用户或更新本地状态
           console.log('Profile updated successfully');

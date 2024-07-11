@@ -82,7 +82,7 @@ export default {
         }
         formData.append('file', this.file);
 
-        axios.post('http://localhost:8005/blogs/insertBlog', formData, {
+        axios.post('http://localhost:9527/blogs/insertBlog', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

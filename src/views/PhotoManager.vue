@@ -97,7 +97,7 @@ export default {
         })], {type: 'application/json'})); // 图片描述
 
         // 发送POST请求到后端的/uploadPhoto端点
-        axios.post('http://localhost:8005/photos/uploadPhoto', formData, {
+        axios.post('http://localhost:9527/photos/uploadPhoto', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -117,7 +117,7 @@ export default {
       }
     },
     fetchPhotos() {
-      axios.get('http://localhost:8005/photos/getAllPhotos')
+      axios.get('http://localhost:9527/photos/getAllPhotos')
           .then(async response => {
             this.photos = response.data;
             // 为每个照片对象添加URL
@@ -144,7 +144,7 @@ export default {
     deletePhoto(photoId) {
       if (this.userType == 1) {
         // 使用axios发送DELETE请求到后端接口
-        axios.delete(`http://localhost:8005/photos/deletePhoto/${photoId}`)
+        axios.delete(`http://localhost:9527/photos/deletePhoto/${photoId}`)
             .then(response => {
               if (response.data === 'success') {
                 this.$message.success('图片删除成功！');

@@ -17,7 +17,7 @@ import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import {Minio} from 'minio-js';
 import {useRoute, useRouter} from 'vue-router';
-import UpdateArticleModal from "@/components/UpdateArticleModal.vue";
+import UpdateArticleModal from "@/components/blog/UpdateArticleModal.vue";
 
 // 使用useRoute来获取当前路由实例
 const route = useRoute();

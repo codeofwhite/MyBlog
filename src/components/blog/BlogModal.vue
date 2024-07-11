@@ -74,7 +74,7 @@ const deleteBlog = async () => {
   if (userType.value == 1) {
     try {
       // 发送DELETE请求到后端
-      const response = await axios.delete(`http://localhost:8005/blogs/delete/${props.blog.id}`);
+      const response = await axios.delete(`http://localhost:9527/blogs/delete/${props.blog.id}`);
       // 请求成功后的操作
       alert('删除成功'); // 显示一个简单的成功通知
       console.log(response.data); // 打印成功消息

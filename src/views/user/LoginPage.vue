@@ -47,7 +47,7 @@ import {useStore} from 'vuex';
 import Vcode from "vue3-puzzle-vcode";
 import axios from 'axios'; // 引入axios
 import router from '@/router'
-import UserPage from "@/components/UserPage.vue";
+import UserPage from "@/components/user/UserPage.vue";
 import {ElMessage} from 'element-plus';
 
 // 用户资料
@@ -97,7 +97,7 @@ const onLogin = async () => {
         // 发送登录请求到后端
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:8004/login',
+          url: 'http://localhost:9527/user/login',
           data: loginData,
           headers: {'Content-Type': 'application/json'}
         });
@@ -105,7 +105,7 @@ const onLogin = async () => {
         if (response.data.success) {
           // 登录成功，获取用户资料
           // 调用 /findByEmail 接口获取用户资料
-          const userResponse = await axios.post('http://localhost:8004/user/findByEmail', {
+          const userResponse = await axios.post('http://localhost:9527/user/findByEmail', {
             uemail: formData.account
           });
           // 如果用户选择了“记住我”，则将登录状态保存到 localStorage

@@ -55,7 +55,7 @@
 <script setup>
 import axios from 'axios';
 import {ref, computed, onMounted} from 'vue';
-import UserEditModal from "@/components/UserEditModal.vue";
+import UserEditModal from "@/components/user/UserEditModal.vue";
 import {useStore} from "vuex";
 import {ElMessage} from "element-plus";
 
@@ -74,7 +74,7 @@ const userType = computed(() => store.state.user_type);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8004/user/getAllUser');
+    const response = await axios.get('http://localhost:9527/user/getAllUser');
     users.value = response.data;
   } catch (error) {
     console.error('获取用户列表失败:', error);
@@ -116,7 +116,7 @@ const handleUserUpdated = async (updatedUser) => {
   // 处理用户更新逻辑，例如更新用户列表
   console.log('用户已更新', updatedUser);
   // 可能需要刷新用户列表
-  const response = await axios.get('http://localhost:8004/user/getAllUser');
+  const response = await axios.get('http://localhost:9527/user/getAllUser');
   users.value = response.data;
 };
 

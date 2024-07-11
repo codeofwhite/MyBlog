@@ -1,13 +1,13 @@
 import {createMemoryHistory, createRouter} from 'vue-router'
 import HomePage from "@/views/HomePage.vue";
-import LoginPage from "@/views/LoginPage.vue";
-import EditArticle from "@/views/Blog/EditArticle.vue";
-import ArticleAnalysis from "@/views/Blog/ArticleAnalysis.vue";
-import Write from "@/views/Blog/WriteArticle.vue";
+import LoginPage from "@/views/user/LoginPage.vue";
+import EditArticle from "@/views/blog/EditArticle.vue";
+import ArticleAnalysis from "@/views/blog/ArticleAnalysis.vue";
+import Write from "@/views/blog/WriteArticle.vue";
 import PhotoManager from "@/views/PhotoManager.vue";
-import UserManager from "@/views/UserManager.vue";
-import EditSingleBlog from "@/components/EditSingleBlog.vue";
-import RegisterPage from "@/views/RegisterPage.vue";
+import UserManager from "@/views/user/UserManager.vue";
+import EditSingleBlog from "@/components/blog/EditSingleBlog.vue";
+import RegisterPage from "@/views/user/RegisterPage.vue";
 import CommentManager from "@/views/CommentManager.vue";
 
 const routes = [

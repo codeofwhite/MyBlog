@@ -83,7 +83,7 @@ export default {
       isSubmitting.value = true;
       message.value = '';
       try {
-        const response = await axios.put('http://localhost:8004/user/adminUpdate', editableUser.value);
+        const response = await axios.put('http://localhost:9527/user/adminUpdate', editableUser.value);
         if (response.data === 'success') {
           message.value = '用户信息更新成功';
           emit('user-updated', editableUser.value);

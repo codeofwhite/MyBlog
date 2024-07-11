@@ -33,7 +33,7 @@
 <script setup>
 import axios from 'axios';
 import {ref, onMounted, computed} from 'vue';
-import BlogModal from '@/components/BlogModal.vue';
+import BlogModal from '@/components/blog/BlogModal.vue';
 import {Minio} from "minio-js";
 
 const blogs = ref([]);
@@ -49,7 +49,7 @@ const handleBlogDeleted = (deletedBlogId) => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8005/blogs/getAllBlogs');
+    const response = await axios.get('http://localhost:9527/blogs/getAllBlogs');
     blogs.value = response.data;
   } catch (error) {
     console.error('获取博客列表失败:', error);
