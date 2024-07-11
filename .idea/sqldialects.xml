@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/springCloud-provider-8001/src/main/resources/mybatis/mapper/DeptMapper.xml" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/springCloud-provider-8006/src/main/resources/mapper/DanmuMapper.xml" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/springCloud-provider-hystrix-8004/src/main/java/springCloud/hystrix/mapper/UserMapper.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/springCloud-provider-hystrix-8004/src/main/resources/mapper/UserMapper.xml" dialect="GenericSQL" />
   </component>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="springCloud.hystrix.mapper.DanmuMapper">
+<mapper namespace="springCloud.mapper.DanmuMapper">
     <insert id="insertDanmu">
         insert into danmu(danmu, uemail, blog_id)
         VALUES (#{danmu}, #{uemail}, #{blogId})
