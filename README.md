@@ -29,11 +29,6 @@
 - **后台分支**：`admin`（管理界面）。
 - **后端分支**：`back`（后端服务）。
 
-## 如何运行
-1. 克隆本仓库：
-   ```bash
-   git clone https://github.com/codeofwhite/MyBlog.git
-
 2. 安装依赖
 
 3. 启动前端
